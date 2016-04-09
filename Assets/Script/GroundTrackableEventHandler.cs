@@ -72,6 +72,8 @@ namespace Vuforia
 
         private void OnTrackingFound()
         {
+			if (GameObject.Find ("NetworkManager").GetComponent<StartUp> ().isServer)
+				return;
             GameObject Envir = GameObject.Find("Enviroment");
 
             Renderer[] rendererComponents = Envir.GetComponentsInChildren<Renderer>(true);
@@ -96,7 +98,7 @@ namespace Vuforia
 				serverStart = true;
 			else
 				return;
-            /***** Build Jenga Aniamation ****/
+            /***** Build Jenga Animation ****/
 
                 GameObject Jenga = GameObject.Find("Jenga");
                 StartCoroutine(Build(Jenga));
@@ -109,6 +111,8 @@ namespace Vuforia
 
         private void OnTrackingLost()
         {
+			if (GameObject.Find ("NetworkManager").GetComponent<StartUp> ().isServer)
+				return;
             Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
             Collider[] colliderComponents = GetComponentsInChildren<Collider>(true);
 

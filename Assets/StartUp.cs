@@ -5,8 +5,8 @@ using UnityEngine.Networking;
 public class StartUp : MonoBehaviour {
 	public string server_ip;
 	public int server_port;
-	private bool isServer = false;
-	private bool started = false;
+	public bool isServer = false;
+	public bool started = false;
 	// Use this for initialization
 	void Start () {
 		if (server_ip.Equals (Network.player.ipAddress)) {
@@ -22,7 +22,7 @@ public class StartUp : MonoBehaviour {
 		if (!started) {
 			if (isServer) {
 				NetworkManager.singleton.networkPort = server_port;
-				NetworkManager.singleton.StartHost ();
+				NetworkManager.singleton.StartServer ();
 			} else {
 				NetworkManager.singleton.networkAddress = server_ip;
 				NetworkManager.singleton.networkPort = server_port;
