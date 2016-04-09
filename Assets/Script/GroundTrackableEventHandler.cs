@@ -16,7 +16,7 @@ namespace Vuforia
                                                 ITrackableEventHandler
     {
         private bool GameStart;
-		public bool serverStart = false;
+		public bool serverStart;
         #region PRIVATE_MEMBER_VARIABLES
 
         private TrackableBehaviour mTrackableBehaviour;
@@ -29,6 +29,7 @@ namespace Vuforia
 
         void Start()
         {
+			serverStart = false;
             GameStart = false;
             mTrackableBehaviour = GetComponent<TrackableBehaviour>();
             if (mTrackableBehaviour)
@@ -72,8 +73,6 @@ namespace Vuforia
 
         private void OnTrackingFound()
         {
-			if (GameObject.Find ("NetworkManager").GetComponent<StartUp> ().isServer)
-				return;
             GameObject Envir = GameObject.Find("Enviroment");
 
             Renderer[] rendererComponents = Envir.GetComponentsInChildren<Renderer>(true);
@@ -94,10 +93,11 @@ namespace Vuforia
             }
 
 
-			if (!serverStart)
+			if (!serverStart) {
 				serverStart = true;
-			else
+			} else {
 				return;
+			}
             /***** Build Jenga Animation ****/
 
                 GameObject Jenga = GameObject.Find("Jenga");
@@ -111,8 +111,6 @@ namespace Vuforia
 
         private void OnTrackingLost()
         {
-			if (GameObject.Find ("NetworkManager").GetComponent<StartUp> ().isServer)
-				return;
             Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
             Collider[] colliderComponents = GetComponentsInChildren<Collider>(true);
 
