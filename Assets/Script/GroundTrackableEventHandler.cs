@@ -16,7 +16,7 @@ namespace Vuforia
                                                 ITrackableEventHandler
     {
         private bool GameStart;
-		private bool serverStart = false;
+		public bool serverStart = false;
         #region PRIVATE_MEMBER_VARIABLES
 
         private TrackableBehaviour mTrackableBehaviour;
