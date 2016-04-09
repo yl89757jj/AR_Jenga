@@ -71,29 +71,33 @@ namespace Vuforia
 
         private void OnTrackingFound()
         {
-            Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
-            Collider[] colliderComponents = GetComponentsInChildren<Collider>(true);
+
+            GameObject Envir = GameObject.Find("Enviroment");
+
+            Renderer[] rendererComponents = Envir.GetComponentsInChildren<Renderer>(true);
+            Collider[] colliderComponents = Envir.GetComponentsInChildren<Collider>(true);
 
             // Enable rendering:
             foreach (Renderer component in rendererComponents)
             {
-                component.enabled = true;
+                    component.enabled = true;
             }
 
             // Enable colliders:
             foreach (Collider component in colliderComponents)
             {
-                component.enabled = true;
+                    component.enabled = true;
+                    if (component.attachedRigidbody)
+                        component.attachedRigidbody.useGravity = true;
             }
+
 
             /***** Build Jenga Aniamation ****/
-            if (!GameStart)
-            {
+
                 GameObject Jenga = GameObject.Find("Jenga");
                 StartCoroutine(Build(Jenga));
-                GameStart = true;
 
-            }
+            
 
             Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " found");
         }
@@ -113,8 +117,11 @@ namespace Vuforia
             // Disable colliders:
             foreach (Collider component in colliderComponents)
             {
+                if (component.attachedRigidbody)
+                    component.attachedRigidbody.useGravity = false;
                 component.enabled = false;
             }
+            
 
             Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " lost");
         }
@@ -122,16 +129,21 @@ namespace Vuforia
         IEnumerator Build(GameObject Jenga)
         {
             Renderer[] JengaComponents = Jenga.GetComponentsInChildren<Renderer>(true);
-            foreach (Renderer component in JengaComponents)
-            {
-                component.enabled = false;
-            }
 
             foreach (Renderer component in JengaComponents)
             {
                 component.enabled = true;
-                yield return new WaitForSeconds(0.5f);
+
+                Collider brick_col = component.GetComponent<Collider>();
+                brick_col.enabled = true;
+                if (brick_col.attachedRigidbody)
+                    brick_col.attachedRigidbody.useGravity = true;
+                if (!GameStart) 
+                    yield return new WaitForSeconds(0.5f);
+              
             }
+            GameStart = true;
+
         }
 
         #endregion // PRIVATE_METHODS
