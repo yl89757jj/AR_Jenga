@@ -99,9 +99,10 @@ namespace Vuforia
 				return;
 			}
             /***** Build Jenga Animation ****/
-
-                GameObject Jenga = GameObject.Find("Jenga");
-                StartCoroutine(Build(Jenga));
+			if (!GameObject.Find ("NetworkManager").GetComponent<StartUp> ().isServer) {
+				GameObject Jenga = GameObject.Find ("Jenga");
+				StartCoroutine (Build (Jenga));
+			}
 
             
 
