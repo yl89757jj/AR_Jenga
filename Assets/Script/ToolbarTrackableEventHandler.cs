@@ -1,10 +1,9 @@
-﻿/*==============================================================================
+/*==============================================================================
 Copyright (c) 2010-2014 Qualcomm Connected Experiences, Inc.
 All Rights Reserved.
 Confidential and Proprietary - Protected under copyright and other laws.
 ==============================================================================*/
 
-using System.Collections;
 using UnityEngine;
 
 namespace Vuforia
@@ -12,15 +11,13 @@ namespace Vuforia
     /// <summary>
     /// A custom handler that implements the ITrackableEventHandler interface.
     /// </summary>
-    public class GroundTrackableEventHandler : MonoBehaviour,
+    public class ToolbarTrackableEventHandler : MonoBehaviour,
                                                 ITrackableEventHandler
     {
-        private bool GameStart;
-
         #region PRIVATE_MEMBER_VARIABLES
-
+ 
         private TrackableBehaviour mTrackableBehaviour;
-
+        private bool select_flag;
         #endregion // PRIVATE_MEMBER_VARIABLES
 
 
@@ -29,9 +26,8 @@ namespace Vuforia
 
         void Start()
         {
-
-            GameStart = false;
             mTrackableBehaviour = GetComponent<TrackableBehaviour>();
+            select_flag = false;
             if (mTrackableBehaviour)
             {
                 mTrackableBehaviour.RegisterTrackableEventHandler(this);
@@ -73,33 +69,26 @@ namespace Vuforia
 
         private void OnTrackingFound()
         {
-            GameObject Envir = GameObject.Find("Enviroment");
-
-            Renderer[] rendererComponents = Envir.GetComponentsInChildren<Renderer>(true);
-            Collider[] colliderComponents = Envir.GetComponentsInChildren<Collider>(true);
+            Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
+            Collider[] colliderComponents = GetComponentsInChildren<Collider>(true);
 
             // Enable rendering:
             foreach (Renderer component in rendererComponents)
             {
+                if (component.gameObject.name == "Select")
+                    component.enabled = !(GameObject.Find("Select").GetComponent<ToolBar_select>().select_flag);
+                else
                     component.enabled = true;
             }
 
             // Enable colliders:
             foreach (Collider component in colliderComponents)
             {
+                if (component.gameObject.name == "Select")
+                    component.enabled = !(GameObject.Find("Select").GetComponent<ToolBar_select>().select_flag);
+                else
                     component.enabled = true;
-                    if (component.attachedRigidbody)
-                        component.attachedRigidbody.useGravity = true;
             }
-
-
-            /***** Build Jenga Animation ****/
-
-			GameObject Jenga = GameObject.Find ("Jenga");
-			StartCoroutine (Build (Jenga));
-
-
-            
 
             Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " found");
         }
@@ -113,39 +102,18 @@ namespace Vuforia
             // Disable rendering:
             foreach (Renderer component in rendererComponents)
             {
-                component.enabled = false;
+
+                component.enabled = false;           
             }
 
             // Disable colliders:
             foreach (Collider component in colliderComponents)
             {
-                if (component.attachedRigidbody)
-                    component.attachedRigidbody.useGravity = false;
+
                 component.enabled = false;
             }
-            
 
             Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " lost");
-        }
-
-        IEnumerator Build(GameObject Jenga)
-        {
-            Renderer[] JengaComponents = Jenga.GetComponentsInChildren<Renderer>(true);
-
-            foreach (Renderer component in JengaComponents)
-            {
-                component.enabled = true;
-
-                Collider brick_col = component.GetComponent<Collider>();
-                brick_col.enabled = true;
-                if (brick_col.attachedRigidbody)
-                    brick_col.attachedRigidbody.useGravity = true;
-                if (!GameStart) 
-                    yield return new WaitForSeconds(0.1f);
-              
-            }
-            GameStart = true;
-
         }
 
         #endregion // PRIVATE_METHODS
