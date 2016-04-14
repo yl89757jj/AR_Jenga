@@ -14,8 +14,10 @@ public class ToolBar_select : MonoBehaviour {
     void Update(){
         if (Input.GetMouseButtonDown(0) && select_flag)
             StartCoroutine(ToolbarDeslect());
-        if (Input.GetMouseButtonDown(1))
-            Debug.Log("To be determined");
+        if (Input.GetMouseButtonDown(1) && select_flag)
+            selected_brick.transform.parent = null;
+        if (Input.GetMouseButtonUp(1) && select_flag)
+            selected_brick.transform.parent = transform;
     }
 
     void OnTriggerEnter(Collider other) {
