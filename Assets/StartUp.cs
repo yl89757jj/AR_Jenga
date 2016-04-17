@@ -22,7 +22,7 @@ public class StartUp : MonoBehaviour {
 		if (!started) {
 			if (isServer) {
 				NetworkManager.singleton.networkPort = server_port;
-				NetworkManager.singleton.StartHost ();
+				NetworkManager.singleton.StartServer ();
 			} else {
 				NetworkManager.singleton.networkAddress = server_ip;
 				NetworkManager.singleton.networkPort = server_port;
