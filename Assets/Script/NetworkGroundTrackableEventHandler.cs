@@ -35,8 +35,8 @@ namespace Vuforia
         {
 			if (GameObject.Find ("NetworkManager").GetComponent<StartUp> ().isServer) {
 				GameStart = false;
+				tracked = false;
 			}
-			tracked = false;
             mTrackableBehaviour = GetComponent<TrackableBehaviour>();
             if (mTrackableBehaviour)
             {
@@ -69,7 +69,7 @@ namespace Vuforia
             }
             else
             {
-                OnTrackingLost();
+//                OnTrackingLost();
             }
         }
 
