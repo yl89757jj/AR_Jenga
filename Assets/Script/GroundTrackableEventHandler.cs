@@ -16,7 +16,7 @@ namespace Vuforia
                                                 ITrackableEventHandler
     {
         private bool GameStart;
-
+		public GameObject gameController;
         #region PRIVATE_MEMBER_VARIABLES
 
         private TrackableBehaviour mTrackableBehaviour;
@@ -73,6 +73,7 @@ namespace Vuforia
 
         private void OnTrackingFound()
         {
+			gameController.GetComponent<GameStart>().gameStarted = true;
             GameObject Envir = GameObject.Find("Enviroment");
 
             Renderer[] rendererComponents = Envir.GetComponentsInChildren<Renderer>(true);
