@@ -18,6 +18,7 @@ namespace Vuforia
  
         private TrackableBehaviour mTrackableBehaviour;
         private bool select_flag;
+		public GameObject gameController;
         #endregion // PRIVATE_MEMBER_VARIABLES
 
 
@@ -69,6 +70,7 @@ namespace Vuforia
 
         private void OnTrackingFound()
         {
+			gameController.GetComponent<GameStart>().gameStarted = true;
             Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
             Collider[] colliderComponents = GetComponentsInChildren<Collider>(true);
 
