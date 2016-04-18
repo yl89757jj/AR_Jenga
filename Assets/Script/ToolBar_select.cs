@@ -10,6 +10,8 @@ public class ToolBar_select : MonoBehaviour {
 	private GameObject selected_brick;
 	private GameObject[] brickObj;
 	private List<GameObject> highlighted;
+    public GameObject JengaGame;
+    public Camera ARcamera;
 
     void Start() {
         select_flag = false;
@@ -17,6 +19,11 @@ public class ToolBar_select : MonoBehaviour {
     }
 
     void Update(){
+
+        if (!select_flag && Input.GetMouseButton(0) && GetComponent<Renderer>().enabled)
+        {
+            StartCoroutine(ChangeLevel());
+        }
         if (Input.GetMouseButtonDown(0) && select_flag)
             ToolbarDeslect();
         if (Input.GetMouseButtonDown(1) && select_flag)
@@ -82,4 +89,32 @@ public class ToolBar_select : MonoBehaviour {
 	IEnumerator Wait() {
 		yield return new WaitForSeconds(1.0f);
 	}
+
+    IEnumerator ChangeLevel()
+    {
+        Debug.Log("ChangeLevel");
+        GameObject Jenga = GameObject.Find("Jenga");
+        Collider[] colliderComponents = Jenga.GetComponentsInChildren<Collider>(true);
+        /*
+        foreach (Collider component in colliderComponents)
+        {
+            if (component.attachedRigidbody)
+                component.attachedRigidbody.isKinematic = true;
+        }
+        */
+        Vector3 last_toolbar_screen = ARcamera.WorldToScreenPoint(transform.position);
+        yield return new WaitForSeconds(0.05f);
+        Vector3 current_toolbar_screen = ARcamera.WorldToScreenPoint(transform.position);
+        Vector3 jenga_position = JengaGame.transform.localPosition;
+        jenga_position.y += (current_toolbar_screen.y - last_toolbar_screen.y) / 1000;
+        Debug.Log(jenga_position.y);
+        JengaGame.transform.localPosition = jenga_position;
+        /*
+        foreach (Collider component in colliderComponents)
+        {
+            if (component.attachedRigidbody)
+                component.attachedRigidbody.isKinematic = false;
+        }
+        */
+    }
 }
