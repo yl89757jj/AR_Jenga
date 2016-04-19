@@ -6,12 +6,13 @@ public class ToolBar_select : MonoBehaviour {
 	public Material select_material;
 	public Material transparent_mat;
 	public bool select_flag;
+	public GameObject selected_brick;
 	private Material original_material;
-	private GameObject selected_brick;
 	private GameObject[] brickObj;
 	private List<GameObject> highlighted;
     public GameObject JengaGame;
     public Camera ARcamera;
+	public Vector3 collisionPos; //Jizhe add.
 
     void Start() {
         select_flag = false;
@@ -34,6 +35,7 @@ public class ToolBar_select : MonoBehaviour {
 
     void OnTriggerEnter(Collider other) {
         if (other.transform.parent.name == "Jenga"){
+			collisionPos = this.gameObject.transform.position; //Jizhe add;
             select_flag = true;
             selected_brick = other.gameObject;
 			brickObj = GameObject.FindGameObjectsWithTag ("Bricks");
