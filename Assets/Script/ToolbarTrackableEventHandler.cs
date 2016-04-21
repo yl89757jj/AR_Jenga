@@ -72,10 +72,6 @@ namespace Vuforia
 
         private void OnTrackingFound()
         {
-			if (!this.gameObject.GetComponent<PlayerController> ().activated) {
-				this.gameObject.GetComponent<PlayerController> ().activated = true;
-				gameController.GetComponent<InGamePlayers> ().AddPlayer (this.gameObject);
-			}
             Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
             Collider[] colliderComponents = GetComponentsInChildren<Collider>(true);
 

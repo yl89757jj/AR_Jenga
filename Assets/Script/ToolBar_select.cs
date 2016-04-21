@@ -23,9 +23,9 @@ public class ToolBar_select : MonoBehaviour {
 
         if (!select_flag && Input.GetMouseButton(0) && GetComponent<Renderer>().enabled)
         {
-            StartCoroutine(ChangeLevel());
+            //StartCoroutine(ChangeLevel());
         }
-        if (Input.GetMouseButtonDown(0) && select_flag)
+		if ((Input.GetMouseButtonDown(0) || Input.touchCount > 0) && select_flag)
             ToolbarDeslect();
         if (Input.GetMouseButtonDown(1) && select_flag)
             selected_brick.transform.parent = null;
@@ -34,7 +34,7 @@ public class ToolBar_select : MonoBehaviour {
     }
 
     void OnTriggerEnter(Collider other) {
-        if (other.transform.parent.name == "Jenga"){
+		if (other.tag == "Bricks"){
 			collisionPos = this.gameObject.transform.position; //Jizhe add;
             select_flag = true;
             selected_brick = other.gameObject;
@@ -48,7 +48,7 @@ public class ToolBar_select : MonoBehaviour {
             GetComponent<Collider>().enabled = false; 
         }
 		if (other.gameObject.tag == "Selector") {
-			GameObject.Find ("GameController").GetComponent<GameStart> ().RestartGame ();
+			GameObject.Find ("GameController").GetComponent<GameStart> ().RestartPlaymode ();
 		}
     }
 
@@ -56,14 +56,15 @@ public class ToolBar_select : MonoBehaviour {
     {
         selected_brick.GetComponent<Renderer>().material = original_material;
 		selected_brick.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+		selected_brick.GetComponent<Rigidbody> ().isKinematic = false;
         selected_brick.transform.parent = GameObject.Find("Jenga").transform;
 		reHighlight (original_material);
         selected_brick = null;
         original_material = null;
 		StartCoroutine(Wait());
-        select_flag = false;
-        GetComponent<Renderer>().enabled = true;
-        GetComponent<Collider>().enabled = true;
+//        select_flag = false;
+//        GetComponent<Renderer>().enabled = true;
+//        GetComponent<Collider>().enabled = true;
     }
 
 	public void highlightObj (GameObject[] bricks, GameObject selected_obj)
@@ -90,6 +91,9 @@ public class ToolBar_select : MonoBehaviour {
 
 	IEnumerator Wait() {
 		yield return new WaitForSeconds(1.0f);
+		select_flag = false;
+		GetComponent<Renderer>().enabled = true;
+		GetComponent<Collider>().enabled = true;
 	}
 
     IEnumerator ChangeLevel()

@@ -16,7 +16,7 @@ public class GameStart : MonoBehaviour {
 		startText.SetActive (!gameStarted);
 	}
 
-	public void RestartGame() {
+	public void RestartPlaymode() {
 		SceneManager.LoadScene ("FinalProject");
 	}
 }
