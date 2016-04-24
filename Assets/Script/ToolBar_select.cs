@@ -13,6 +13,7 @@ public class ToolBar_select : MonoBehaviour {
     public GameObject JengaGame;
     public Camera ARcamera;
 	public Vector3 collisionPos; //Jizhe add.
+	public GameObject gameController;
 
     void Start() {
         select_flag = false;
@@ -45,7 +46,8 @@ public class ToolBar_select : MonoBehaviour {
             other.GetComponent<Renderer>().material = select_material;
             other.attachedRigidbody.constraints = RigidbodyConstraints.FreezeAll;
             GetComponent<Renderer>().enabled = false;
-            GetComponent<Collider>().enabled = false; 
+            GetComponent<Collider>().enabled = false;
+			gameController.GetComponent<GameStatus> ().inSelect = true;
         }
 		if (other.gameObject.tag == "Selector") {
 			GameObject.Find ("GameController").GetComponent<GameStart> ().RestartPlaymode ();
@@ -65,6 +67,7 @@ public class ToolBar_select : MonoBehaviour {
 		reHighlight (original_material);
         selected_brick = null;
         original_material = null;
+		gameController.GetComponent<GameStatus> ().inSelect = false;
 		StartCoroutine(Wait());
 //        select_flag = false;
 //        GetComponent<Renderer>().enabled = true;
