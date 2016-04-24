@@ -13,6 +13,7 @@ public class ToolBar_select : MonoBehaviour {
     public GameObject JengaGame;
     public Camera ARcamera;
 	public Vector3 collisionPos; //Jizhe add.
+	public GameObject gameController;
 
     void Start() {
         select_flag = false;
@@ -35,7 +36,8 @@ public class ToolBar_select : MonoBehaviour {
 
     void OnTriggerEnter(Collider other) {
 		if (other.tag == "Bricks"){
-			collisionPos = this.gameObject.transform.position; //Jizhe add;
+            other.gameObject.layer = 11;
+            collisionPos = this.gameObject.transform.position; //Jizhe add;
             select_flag = true;
             selected_brick = other.gameObject;
 			brickObj = GameObject.FindGameObjectsWithTag ("Bricks");
@@ -45,22 +47,28 @@ public class ToolBar_select : MonoBehaviour {
             other.GetComponent<Renderer>().material = select_material;
             other.attachedRigidbody.constraints = RigidbodyConstraints.FreezeAll;
             GetComponent<Renderer>().enabled = false;
-            GetComponent<Collider>().enabled = false; 
+            GetComponent<Collider>().enabled = false;
+			gameController.GetComponent<GameStatus> ().inSelect = true;
         }
 		if (other.gameObject.tag == "Selector") {
 			GameObject.Find ("GameController").GetComponent<GameStart> ().RestartPlaymode ();
+		}
+		if (other.gameObject.tag == "Virtual Stick") {
+			GameObject.Find ("GameController").GetComponent<GameStart> ().RestartFreemode();
 		}
     }
 
 	private void ToolbarDeslect()
     {
-        selected_brick.GetComponent<Renderer>().material = original_material;
-		selected_brick.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+        selected_brick.GetComponent<Renderer> ().material = original_material;
+		selected_brick.GetComponent<Rigidbody> ().constraints = RigidbodyConstraints.None;
 		selected_brick.GetComponent<Rigidbody> ().isKinematic = false;
+		selected_brick.GetComponent<Rigidbody> ().useGravity = true;
         selected_brick.transform.parent = GameObject.Find("Jenga").transform;
 		reHighlight (original_material);
         selected_brick = null;
         original_material = null;
+		gameController.GetComponent<GameStatus> ().inSelect = false;
 		StartCoroutine(Wait());
 //        select_flag = false;
 //        GetComponent<Renderer>().enabled = true;

@@ -11,7 +11,7 @@ public class MinimapController : MonoBehaviour {
 	void Start () {
 		overhead = new Vector3 (0, 90f, 0);
 		overhead_rot = Quaternion.Euler (new Vector3 (90f, 0, 0));
-		frontal = new Vector3 (0, 30f, -30f);
+		frontal = new Vector3 (0, 20f, -30f);
 		frontal_rot = Quaternion.Euler (new Vector3 (0, 0, 0));
 		this.gameObject.transform.position = overhead;
 		this.gameObject.transform.rotation = overhead_rot;
