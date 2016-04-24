@@ -36,7 +36,8 @@ public class ToolBar_select : MonoBehaviour {
 
     void OnTriggerEnter(Collider other) {
 		if (other.tag == "Bricks"){
-			collisionPos = this.gameObject.transform.position; //Jizhe add;
+            other.gameObject.layer = 11;
+            collisionPos = this.gameObject.transform.position; //Jizhe add;
             select_flag = true;
             selected_brick = other.gameObject;
 			brickObj = GameObject.FindGameObjectsWithTag ("Bricks");
