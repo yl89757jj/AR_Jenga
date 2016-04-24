@@ -97,7 +97,9 @@ namespace Vuforia
             /***** Build Jenga Animation ****/
 
 			GameObject Jenga = GameObject.Find ("Jenga");
-			StartCoroutine (Build (Jenga));
+			if (Jenga != null) {
+				StartCoroutine (Build (Jenga));
+			}
 
 
             

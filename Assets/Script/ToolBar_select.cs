@@ -50,13 +50,17 @@ public class ToolBar_select : MonoBehaviour {
 		if (other.gameObject.tag == "Selector") {
 			GameObject.Find ("GameController").GetComponent<GameStart> ().RestartPlaymode ();
 		}
+		if (other.gameObject.tag == "Virtual Stick") {
+			GameObject.Find ("GameController").GetComponent<GameStart> ().RestartFreemode();
+		}
     }
 
 	private void ToolbarDeslect()
     {
-        selected_brick.GetComponent<Renderer>().material = original_material;
-		selected_brick.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+        selected_brick.GetComponent<Renderer> ().material = original_material;
+		selected_brick.GetComponent<Rigidbody> ().constraints = RigidbodyConstraints.None;
 		selected_brick.GetComponent<Rigidbody> ().isKinematic = false;
+		selected_brick.GetComponent<Rigidbody> ().useGravity = true;
         selected_brick.transform.parent = GameObject.Find("Jenga").transform;
 		reHighlight (original_material);
         selected_brick = null;
