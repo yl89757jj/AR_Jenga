@@ -2,8 +2,7 @@
 using System.Collections;
 
 public class Drawline : MonoBehaviour {
-	public bool showCollision = false;
-	private Vector3 offset = new Vector3(2.287587f, 0, 0.7604125f);
+	private Vector3 offset = new Vector3(2.287587f, 0.377825f, 0.7604125f);
 	private Vector3 origin;
 	// Use this for initialization
 	void Start () {
@@ -12,8 +11,15 @@ public class Drawline : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (showCollision) {
-			origin = this.gameObject.transform.position + offset;
+		if (this.gameObject.transform.parent == null 
+			|| this.gameObject.transform.parent.gameObject.name != "Jenga") {
+			Vector3 rotated_offset = new Vector3 ();
+			rotated_offset.x = offset.x;
+			rotated_offset.y = offset.y;
+			rotated_offset.z = offset.z;
+			Quaternion rot = this.transform.rotation;
+			rotated_offset = rot * rotated_offset;
+			origin = this.gameObject.transform.position + rotated_offset;
 			drawCollision (-Vector3.up);
 			drawCollision (Vector3.left);
 			drawCollision (Vector3.forward);
