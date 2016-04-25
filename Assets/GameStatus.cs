@@ -31,18 +31,18 @@ public class GameStatus : MonoBehaviour {
 					float deltaY = myTouch.position.y - touchOrigin.y;
 					if (deltaX > 40f) {
 						workSpace.gameObject.transform.RotateAround (workSpace.gameObject.transform.position, Vector3.up, -3f);
-						minimapCam.gameObject.transform.RotateAround(new Vector3(0, 0, 0), Vector3.up, -3f);
+						minimapCam.gameObject.transform.RotateAround (new Vector3 (0, 0, 0), Vector3.up, -3f);
 					}
 					if (deltaX < -40f) {
 						workSpace.gameObject.transform.RotateAround (workSpace.gameObject.transform.position, Vector3.up, 3f);
-						minimapCam.gameObject.transform.RotateAround(new Vector3(0, 0, 0), Vector3.up, 3f);
+						minimapCam.gameObject.transform.RotateAround (new Vector3 (0, 0, 0), Vector3.up, 3f);
 					}
 					Vector3 originPos = workSpace.gameObject.transform.position;
 					if (deltaY > 40f) {
-						workSpace.gameObject.transform.Translate (new Vector3(0, 0.5f, 0));
+						workSpace.gameObject.transform.Translate (new Vector3 (0, 0.5f, 0));
 					}
 					if (deltaY < -40f) {
-						workSpace.gameObject.transform.Translate (new Vector3(0, -0.5f, 0));
+						workSpace.gameObject.transform.Translate (new Vector3 (0, -0.5f, 0));
 					}
 					if (workSpace.gameObject.transform.position.y > 10f || workSpace.gameObject.transform.position.y < -30f) {
 						workSpace.gameObject.transform.position = originPos;
@@ -56,6 +56,25 @@ public class GameStatus : MonoBehaviour {
 						rb.isKinematic = false;
 						rb.constraints = new RigidbodyConstraints ();
 					}
+				}
+			} else {
+				if (Input.GetKey (KeyCode.A)) {
+					workSpace.gameObject.transform.RotateAround (workSpace.gameObject.transform.position, Vector3.up, -3f);
+					minimapCam.gameObject.transform.RotateAround (new Vector3 (0, 0, 0), Vector3.up, -3f);
+				}
+				if (Input.GetKey (KeyCode.D)) {
+					workSpace.gameObject.transform.RotateAround (workSpace.gameObject.transform.position, Vector3.up, 3f);
+					minimapCam.gameObject.transform.RotateAround (new Vector3 (0, 0, 0), Vector3.up, 3f);
+				}
+				Vector3 originPos = workSpace.gameObject.transform.position;
+				if (Input.GetKey (KeyCode.W)) {
+					workSpace.gameObject.transform.Translate (new Vector3 (0, 0.5f, 0));
+				}
+				if (Input.GetKey (KeyCode.S)) {
+					workSpace.gameObject.transform.Translate (new Vector3 (0, -0.5f, 0));
+				}
+				if (workSpace.gameObject.transform.position.y > 10f || workSpace.gameObject.transform.position.y < -30f) {
+					workSpace.gameObject.transform.position = originPos;
 				}
 			}
 		}

@@ -34,10 +34,11 @@ public class CreateBrick : MonoBehaviour {
 		float random = Random.value;
 		GameObject newBrick = null;
 		Vector3 offset = jengaGame.gameObject.transform.position;
+		Quaternion rot = jengaGame.gameObject.transform.rotation;
 		if (random > 0.5f) {
-			newBrick = (GameObject) Instantiate (darkBrick, spawnLocation+offset, Quaternion.identity);
+			newBrick = (GameObject) Instantiate (darkBrick, rot*spawnLocation+offset, Quaternion.identity*rot);
 		} else {
-			newBrick = (GameObject) Instantiate (lightBrick, spawnLocation+offset, Quaternion.identity);
+			newBrick = (GameObject) Instantiate (lightBrick, rot*spawnLocation+offset, Quaternion.identity*rot);
 		}
 		newBrick.GetComponent<Rigidbody> ().isKinematic = true;
 		newBrick.GetComponent<Rigidbody> ().useGravity = true;

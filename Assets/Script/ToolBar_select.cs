@@ -19,46 +19,55 @@ public class ToolBar_select : MonoBehaviour {
 		gameController = GameObject.Find ("GameController");
 		newTurnButton = GameObject.Find ("NewTurn");
 		Debug.Log (newTurnButton);
+
 		select_flag = false;
 		waitTime = 0f;
-	
 	}
 
 
-	void Update(){
-		Debug.Log ("wait"+ waitTime);
+	void Update() {
 		newTurn = newTurnButton.GetComponent<ButtonController> ().newTurn;
-		if (Input.GetMouseButtonDown(0) && select_flag)
-			StartCoroutine(ToolbarDeslect());
+		if ((Input.GetMouseButtonDown(0) || Input.touchCount > 0) && select_flag)
+			StartCoroutine(ToolbarDeselect());
 		if (Input.GetMouseButtonDown(1) && select_flag)
 			selected_brick.transform.parent = null;
 		if (Input.GetMouseButtonUp(1) && select_flag)
 			selected_brick.transform.parent = transform;
 	}
 
+	void OnTriggerEnter(Collider other) {
+		if (other.gameObject.tag == "Selector") {
+			gameController.GetComponent<GameStart> ().RestartPlaymode ();
+		}
+		if (other.gameObject.tag == "Virtual Stick") {
+			gameController.GetComponent<GameStart> ().RestartFreemode ();
+		}
+	}
 
 	void OnTriggerStay(Collider other) {
-		bool selectable = other.GetComponent<Brick> ().selectable;
-		Debug.Log ("NEW TURN  "+newTurn);
-		Debug.Log("SELECTABLE   "+selectable);
-		if (newTurn&&selectable) {
-			if (try_brick==null) {
-				try_brick = other.gameObject;
-				original_material = other.GetComponent<Renderer> ().material;
-				other.GetComponent<Renderer> ().material.shader = Shader.Find ("Outlined/Silhouette Only");
-			}else if (try_brick!=other.gameObject) {
-				waitTime = 0f;
-				try_brick = null;
-				try_brick.GetComponent<Renderer> ().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
-				Debug.Log ("switch");
-			}
-			else{
-				waitTime += Time.deltaTime;}
+		if (other.gameObject.tag == "Bricks") {
+			bool selectable = other.GetComponent<Brick> ().selectable;
+			Debug.Log ("NEW TURN  " + newTurn);
+			Debug.Log ("SELECTABLE   " + selectable);
+			if (newTurn && selectable) {
+				if (try_brick == null) {
+					try_brick = other.gameObject;
+					original_material = other.GetComponent<Renderer> ().material;
+					other.GetComponent<Renderer> ().material.shader = Shader.Find ("Outlined/Silhouette Only");
+				} else if (!try_brick.Equals(other.gameObject)) {
+					waitTime = 0f;
+					try_brick.GetComponent<Renderer> ().material.shader = Shader.Find ("Self-Illumin/Outlined Diffuse");
+					try_brick = other.gameObject;
+					try_brick.GetComponent<Renderer> ().material.shader = Shader.Find ("Outlined/Silhouette Only");
+					Debug.Log ("switch");
+				} else {
+					waitTime += Time.deltaTime;
+				}
 
-			if (waitTime > 5f&&select_flag == false)
+				if (waitTime > 5f && select_flag == false)
 					SuspendSelect ();
 			}
-
+		}
 	}
 		
 
@@ -80,21 +89,23 @@ public class ToolBar_select : MonoBehaviour {
 	}
 
 
-	IEnumerator ToolbarDeslect()
+	IEnumerator ToolbarDeselect()
 	{
-		selected_brick.GetComponent<Renderer>().material = original_material;
-		selected_brick.GetComponent<Renderer>().material.shader=Shader.Find("Standard");
-		selected_brick.GetComponent<Collider>().attachedRigidbody.constraints = RigidbodyConstraints.None;
-		selected_brick.transform.parent = GameObject.Find("Jenga").transform;
-		selected_brick = null;
-		original_material = null;
-		yield return new WaitForSeconds(1f);
-		select_flag = false;
-		GetComponent<Renderer>().enabled = true;
-		GetComponent<Collider>().enabled = true;
-		newTurn = false;
-		newTurnButton.SendMessage ("EndTurn");
-		newTurnButton.SendMessage ("NewTurn");
-		gameController.GetComponent<GameStatus> ().inSelect = false;
+		if (selected_brick != null) {
+			selected_brick.GetComponent<Renderer> ().material = original_material;
+			selected_brick.GetComponent<Renderer> ().material.shader = Shader.Find ("Standard");
+			selected_brick.GetComponent<Collider> ().attachedRigidbody.constraints = RigidbodyConstraints.None;
+			selected_brick.transform.parent = GameObject.Find ("Jenga").transform;
+			selected_brick = null;
+			original_material = null;
+			yield return new WaitForSeconds (1f);
+			select_flag = false;
+			GetComponent<Renderer> ().enabled = true;
+			GetComponent<Collider> ().enabled = true;
+			newTurn = false;
+			newTurnButton.SendMessage ("EndTurn");
+			newTurnButton.SendMessage ("NewTurn");
+			gameController.GetComponent<GameStatus> ().inSelect = false;
+		}
 	}
 }

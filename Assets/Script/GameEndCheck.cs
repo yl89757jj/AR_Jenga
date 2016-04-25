@@ -20,7 +20,7 @@ public class GameEndCheck : MonoBehaviour {
     {
         if (collision.gameObject.tag == "Bricks")
         {
-            if (collision.gameObject.Equals(brickselected))
+            if (!collision.gameObject.Equals(brickselected))
             {
                 foreach (ContactPoint contact in collision.contacts)
                 {
