@@ -4,131 +4,97 @@ using System.Collections.Generic;
 
 public class ToolBar_select : MonoBehaviour {
 	public Material select_material;
-	public Material transparent_mat;
-	public bool select_flag;
-	public GameObject selected_brick;
 	private Material original_material;
-	private GameObject[] brickObj;
-	private List<GameObject> highlighted;
-    public GameObject JengaGame;
-    public Camera ARcamera;
+	public GameObject selected_brick;
+	private GameObject try_brick;
+	public bool select_flag;
+	private bool newTurn;
+	private int random;
 	public Vector3 collisionPos; //Jizhe add.
+	private GameObject newTurnButton;
 	public GameObject gameController;
+	private float waitTime;
 
-    void Start() {
-        select_flag = false;
-		highlighted = new List<GameObject>();
-    }
+	void Start() {
+		gameController = GameObject.Find ("GameController");
+		newTurnButton = GameObject.Find ("NewTurn");
+		Debug.Log (newTurnButton);
+		select_flag = false;
+		waitTime = 0f;
+	
+	}
 
-    void Update(){
 
-        if (!select_flag && Input.GetMouseButton(0) && GetComponent<Renderer>().enabled)
-        {
-            //StartCoroutine(ChangeLevel());
-        }
-		if ((Input.GetMouseButtonDown(0) || Input.touchCount > 0) && select_flag)
-            ToolbarDeslect();
-        if (Input.GetMouseButtonDown(1) && select_flag)
-            selected_brick.transform.parent = null;
-        if (Input.GetMouseButtonUp(1) && select_flag)
-            selected_brick.transform.parent = transform;
-    }
+	void Update(){
+		Debug.Log ("wait"+ waitTime);
+		newTurn = newTurnButton.GetComponent<ButtonController> ().newTurn;
+		if (Input.GetMouseButtonDown(0) && select_flag)
+			StartCoroutine(ToolbarDeslect());
+		if (Input.GetMouseButtonDown(1) && select_flag)
+			selected_brick.transform.parent = null;
+		if (Input.GetMouseButtonUp(1) && select_flag)
+			selected_brick.transform.parent = transform;
+	}
 
-    void OnTriggerEnter(Collider other) {
-		if (other.tag == "Bricks"){
-            other.gameObject.layer = 11;
-            collisionPos = this.gameObject.transform.position; //Jizhe add;
-            select_flag = true;
-            selected_brick = other.gameObject;
-			brickObj = GameObject.FindGameObjectsWithTag ("Bricks");
-			highlightObj (brickObj, selected_brick);
-            original_material = selected_brick.GetComponent<Renderer>().material;
-            other.transform.parent = transform;
-            other.GetComponent<Renderer>().material = select_material;
-            other.attachedRigidbody.constraints = RigidbodyConstraints.FreezeAll;
-            GetComponent<Renderer>().enabled = false;
-            GetComponent<Collider>().enabled = false;
-			gameController.GetComponent<GameStatus> ().inSelect = true;
-        }
-		if (other.gameObject.tag == "Selector") {
-			GameObject.Find ("GameController").GetComponent<GameStart> ().RestartPlaymode ();
-		}
-		if (other.gameObject.tag == "Virtual Stick") {
-			GameObject.Find ("GameController").GetComponent<GameStart> ().RestartFreemode();
-		}
-    }
 
-	private void ToolbarDeslect()
-    {
-        selected_brick.GetComponent<Renderer> ().material = original_material;
-		selected_brick.GetComponent<Rigidbody> ().constraints = RigidbodyConstraints.None;
-		selected_brick.GetComponent<Rigidbody> ().isKinematic = false;
-		selected_brick.GetComponent<Rigidbody> ().useGravity = true;
-        selected_brick.transform.parent = GameObject.Find("Jenga").transform;
-		reHighlight (original_material);
-        selected_brick = null;
-        original_material = null;
-		gameController.GetComponent<GameStatus> ().inSelect = false;
-		StartCoroutine(Wait());
-//        select_flag = false;
-//        GetComponent<Renderer>().enabled = true;
-//        GetComponent<Collider>().enabled = true;
-    }
-
-	public void highlightObj (GameObject[] bricks, GameObject selected_obj)
-	{
-		Debug.Log ("transparent");
-		highlighted.Clear ();
-		foreach (GameObject item in bricks) {
-			if (item.Equals (selected_obj))
-				continue;
-			if (Mathf.Abs (item.transform.position.y - selected_obj.transform.position.y) < 0.5f && Mathf.Abs (item.transform.position.z - selected_obj.transform.position.z) < 1f) {
-				item.GetComponent<Renderer> ().material = transparent_mat;
-				highlighted.Add (item);
+	void OnTriggerStay(Collider other) {
+		bool selectable = other.GetComponent<Brick> ().selectable;
+		Debug.Log ("NEW TURN  "+newTurn);
+		Debug.Log("SELECTABLE   "+selectable);
+		if (newTurn&&selectable) {
+			if (try_brick==null) {
+				try_brick = other.gameObject;
+				original_material = other.GetComponent<Renderer> ().material;
+				other.GetComponent<Renderer> ().material.shader = Shader.Find ("Outlined/Silhouette Only");
+			}else if (try_brick!=other.gameObject) {
+				waitTime = 0f;
+				try_brick = null;
+				try_brick.GetComponent<Renderer> ().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
+				Debug.Log ("switch");
 			}
+			else{
+				waitTime += Time.deltaTime;}
+
+			if (waitTime > 5f&&select_flag == false)
+					SuspendSelect ();
+			}
+
+	}
+		
+
+	//select after 5 seconds 
+	void SuspendSelect(){
+		select_flag = true;
+		selected_brick = try_brick;
+		try_brick = null;
+		if (selected_brick != null) {
+			selected_brick.transform.parent = transform;
+			selected_brick.GetComponent<Renderer> ().material = select_material;
+			selected_brick.GetComponent<Rigidbody> ().constraints = RigidbodyConstraints.FreezeAll;
+			GetComponent<Renderer> ().enabled = false;
+			GetComponent<Collider> ().enabled = false; 
+			Debug.Log ("get");
+			collisionPos = transform.position; //Jizhe add;
+			gameController.GetComponent<GameStatus> ().inSelect = true;
 		}
 	}
 
-	public void reHighlight (Material orig_mat)
+
+	IEnumerator ToolbarDeslect()
 	{
-		foreach (GameObject item in highlighted) {
-			item.GetComponent<Renderer> ().material = orig_mat;
-		}
-		highlighted.Clear ();
-	}
-
-	IEnumerator Wait() {
-		yield return new WaitForSeconds(1.0f);
+		selected_brick.GetComponent<Renderer>().material = original_material;
+		selected_brick.GetComponent<Renderer>().material.shader=Shader.Find("Standard");
+		selected_brick.GetComponent<Collider>().attachedRigidbody.constraints = RigidbodyConstraints.None;
+		selected_brick.transform.parent = GameObject.Find("Jenga").transform;
+		selected_brick = null;
+		original_material = null;
+		yield return new WaitForSeconds(1f);
 		select_flag = false;
 		GetComponent<Renderer>().enabled = true;
 		GetComponent<Collider>().enabled = true;
+		newTurn = false;
+		newTurnButton.SendMessage ("EndTurn");
+		newTurnButton.SendMessage ("NewTurn");
+		gameController.GetComponent<GameStatus> ().inSelect = false;
 	}
-
-    IEnumerator ChangeLevel()
-    {
-        Debug.Log("ChangeLevel");
-        GameObject Jenga = GameObject.Find("Jenga");
-        Collider[] colliderComponents = Jenga.GetComponentsInChildren<Collider>(true);
-        /*
-        foreach (Collider component in colliderComponents)
-        {
-            if (component.attachedRigidbody)
-                component.attachedRigidbody.isKinematic = true;
-        }
-        */
-        Vector3 last_toolbar_screen = ARcamera.WorldToScreenPoint(transform.position);
-        yield return new WaitForSeconds(0.05f);
-        Vector3 current_toolbar_screen = ARcamera.WorldToScreenPoint(transform.position);
-        Vector3 jenga_position = JengaGame.transform.localPosition;
-        jenga_position.y += (current_toolbar_screen.y - last_toolbar_screen.y) / 1000;
-        Debug.Log(jenga_position.y);
-        JengaGame.transform.localPosition = jenga_position;
-        /*
-        foreach (Collider component in colliderComponents)
-        {
-            if (component.attachedRigidbody)
-                component.attachedRigidbody.isKinematic = false;
-        }
-        */
-    }
 }

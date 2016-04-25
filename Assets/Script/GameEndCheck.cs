@@ -19,8 +19,9 @@ public class GameEndCheck : MonoBehaviour {
 
     void OnCollisionEnter(Collision collision)
     {
-        GameOver.enabled = true;
-        if (collision.gameObject.layer != 11)
-            Debug.Log("GameOver!");
+		if (collision.gameObject.layer != 11) {
+			Debug.Log ("GameOver!");
+			GameOver.enabled = true;
+		}
     }
 }
