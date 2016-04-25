@@ -18,20 +18,22 @@ public class GameEndCheck : MonoBehaviour {
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject != brickselected)
+        if (collision.gameObject.tag == "Bricks")
         {
-            foreach (ContactPoint contact in collision.contacts)
+            if (collision.gameObject.Equals(brickselected))
             {
-                Vector3 offset = contact.point - transform.position;
-                Debug.Log(offset);
-                if (offset.magnitude > 3.5)
-                    GameOver.enabled = true;
+                foreach (ContactPoint contact in collision.contacts)
+                {
+                    Vector3 offset = contact.point - transform.position;
+                    Debug.Log(offset);
+                    if (offset.magnitude > 3.5)
+                        GameOver.enabled = true;
+                }
             }
+            else
+                Debug.Log("Please Replace the brick");
         }
-        else
-            Debug.Log("Please Replace the brick");
     }
-
 
 
 }
