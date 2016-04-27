@@ -27,12 +27,12 @@ public class ToolBar_select : MonoBehaviour {
 
 	void Update() {
 		newTurn = newTurnButton.GetComponent<ButtonController> ().newTurn;
-		if ((Input.GetMouseButtonDown(0) || Input.touchCount > 0) && select_flag)
+		/*if ((Input.GetMouseButtonDown(0) || Input.touchCount > 0) && select_flag)
 			StartCoroutine(ToolbarDeselect());
 		if (Input.GetMouseButtonDown(1) && select_flag)
 			selected_brick.transform.parent = null;
 		if (Input.GetMouseButtonUp(1) && select_flag)
-			selected_brick.transform.parent = transform;
+			selected_brick.transform.parent = transform;*/
 	}
 
 	void OnTriggerEnter(Collider other) {
@@ -84,10 +84,14 @@ public class ToolBar_select : MonoBehaviour {
 			GetComponent<Collider> ().enabled = false; 
 			Debug.Log ("get");
 			collisionPos = transform.position; //Jizhe add;
-			gameController.GetComponent<GameStatus> ().inSelect = true;
 		}
 	}
+		
 
+
+	private void ToolBar_deselect(){
+		StartCoroutine (ToolbarDeselect());
+	}
 
 	IEnumerator ToolbarDeselect()
 	{
