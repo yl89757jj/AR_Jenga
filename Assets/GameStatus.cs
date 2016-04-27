@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class GameStatus : MonoBehaviour {
@@ -9,15 +10,22 @@ public class GameStatus : MonoBehaviour {
 	public GameObject workSpace;
 	private Vector2 touchOrigin = -Vector2.one;
 	public GameObject minimapCam;
+	public GameObject moveCamText;
+	private bool displayHint;
 	// Use this for initialization
 	void Start () {
-	
+		displayHint = true;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		if (displayHint && this.gameObject.GetComponent<GameStart> ().gameStarted) {
+			moveCamText.GetComponent<Text> ().enabled = true;
+		}
 		if (!inSelect) {
 			if (Input.touchCount == 1) {
+				displayHint = false;
+				moveCamText.GetComponent<Text> ().enabled = false;
 				Touch myTouch = Input.GetTouch (0);
 				if (myTouch.phase == TouchPhase.Began) {
 					touchOrigin = myTouch.position;

@@ -8,7 +8,9 @@ public class CreateBrick : MonoBehaviour {
 	public GameObject lightBrick;
 	public GameObject spawnRegion;
 	public GameObject pickupText;
+	public GameObject newBrickText;
 	public GameObject jengaGame;
+	public GameObject freeModeController;
 	private GameObject recentCreated;
 	private Vector3 spawnLocation;
 	private bool readyToCreate = true;
@@ -29,8 +31,10 @@ public class CreateBrick : MonoBehaviour {
 	}
 
 	public void AddBrick() {
-		if (!readyToCreate)
+		if (!readyToCreate) {
+			StartCoroutine(displayText (newBrickText));
 			return;
+		}
 		float random = Random.value;
 		GameObject newBrick = null;
 		Vector3 offset = jengaGame.gameObject.transform.position;
@@ -45,5 +49,12 @@ public class CreateBrick : MonoBehaviour {
 		pickupText.GetComponent<Text> ().enabled = true;
 		newBrick.gameObject.transform.SetParent (spawnRegion.gameObject.transform);
 		recentCreated = newBrick;
+		freeModeController.GetComponent<FreeModeController> ().numberOfBricks--;
+	}
+
+	IEnumerator displayText(GameObject textObject) {
+		textObject.GetComponent<Text> ().enabled = true;
+		yield return new WaitForSeconds (2.0f);
+		textObject.GetComponent<Text> ().enabled = false;
 	}
 }
