@@ -1,8 +1,14 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class FreeModeController : MonoBehaviour {
-	public int numberOfBricks = 40;
+	public int numberOfBricks;
+	public GameObject brickCountText;
+	public GameObject confirmButton;
+	public Color normalColor;
+	public Color lastColor;
+	public bool destructionMode = false;
 	// Use this for initialization
 	void Start () {
 	
@@ -10,6 +16,14 @@ public class FreeModeController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		brickCountText.GetComponent<Text> ().text = numberOfBricks.ToString();
+		if (numberOfBricks <= 10) {
+			brickCountText.GetComponent<Text> ().color = lastColor;
+		} else {
+			brickCountText.GetComponent<Text> ().color = normalColor;
+		}
+		if (numberOfBricks == 0) {
+			confirmButton.SetActive (true);
+		}
 	}
 }

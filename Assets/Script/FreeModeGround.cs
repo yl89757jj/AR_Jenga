@@ -93,17 +93,6 @@ namespace Vuforia
                         component.attachedRigidbody.useGravity = true;
             }
 
-
-            /***** Build Jenga Animation ****/
-
-			GameObject Jenga = GameObject.Find ("Jenga");
-			if (Jenga != null) {
-				StartCoroutine (Build (Jenga));
-			}
-
-
-            
-
             Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " found");
         }
 
@@ -130,27 +119,6 @@ namespace Vuforia
 
             Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " lost");
         }
-
-        IEnumerator Build(GameObject Jenga)
-        {
-            Renderer[] JengaComponents = Jenga.GetComponentsInChildren<Renderer>(true);
-
-            foreach (Renderer component in JengaComponents)
-            {
-                component.enabled = true;
-
-                Collider brick_col = component.GetComponent<Collider>();
-                brick_col.enabled = true;
-                if (brick_col.attachedRigidbody)
-                    brick_col.attachedRigidbody.useGravity = true;
-                if (!GameStart) 
-                    yield return new WaitForSeconds(0.1f);
-              
-            }
-            GameStart = true;
-
-        }
-
         #endregion // PRIVATE_METHODS
     }
 }

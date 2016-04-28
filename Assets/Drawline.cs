@@ -11,7 +11,7 @@ public class Drawline : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (this.gameObject.transform.parent != null && this.gameObject.transform.parent.gameObject.name != "Select") {
+		if (this.gameObject.transform.parent != null && this.gameObject.transform.parent.gameObject.name == "Select") {
 			Vector3 rotated_offset = new Vector3 ();
 			rotated_offset.x = offset.x;
 			rotated_offset.y = offset.y;
@@ -19,6 +19,16 @@ public class Drawline : MonoBehaviour {
 			Quaternion rot = this.transform.rotation;
 			rotated_offset = rot * rotated_offset;
 			origin = this.gameObject.transform.position + rotated_offset;
+			drawCollision (-Vector3.up);
+			drawCollision (Vector3.left);
+			drawCollision (Vector3.forward);
+			drawCollision (-Vector3.left);
+			drawCollision (-Vector3.forward);
+		}
+		if (this.gameObject.name == "Select" && this.gameObject.transform.childCount == 0) {
+			Vector3 rotated_offset = new Vector3 ();
+			Quaternion rot = this.transform.rotation;
+			origin = this.gameObject.transform.position;
 			drawCollision (-Vector3.up);
 			drawCollision (Vector3.left);
 			drawCollision (Vector3.forward);

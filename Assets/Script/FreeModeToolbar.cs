@@ -79,7 +79,7 @@ namespace Vuforia
             foreach (Renderer component in rendererComponents)
             {
                 if (component.gameObject.name == "Select")
-                    component.enabled = !(GameObject.Find("Select").GetComponent<ToolBar_select>().select_flag);
+					component.enabled = !(GameObject.Find("Select").GetComponent<FreeModeSelect>().select_flag);
                 else
                     component.enabled = true;
             }
@@ -88,7 +88,7 @@ namespace Vuforia
             foreach (Collider component in colliderComponents)
             {
                 if (component.gameObject.name == "Select")
-                    component.enabled = !(GameObject.Find("Select").GetComponent<ToolBar_select>().select_flag);
+					component.enabled = !(GameObject.Find("Select").GetComponent<FreeModeSelect>().select_flag);
                 else
                     component.enabled = true;
             }

@@ -28,6 +28,9 @@ public class CreateBrick : MonoBehaviour {
 		} else {
 			readyToCreate = true;
 		}
+		if (freeModeController.GetComponent<FreeModeController> ().numberOfBricks == 0) {
+			this.gameObject.SetActive (false);
+		}
 	}
 
 	public void AddBrick() {
