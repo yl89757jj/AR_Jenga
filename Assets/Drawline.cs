@@ -18,6 +18,7 @@ public class Drawline : MonoBehaviour {
 	void Update () {
 		if (this.gameObject.tag == "Bricks" && this.gameObject.transform.parent != null 
 			&& this.gameObject.transform.parent.gameObject.name == "Select") {
+			hideCollision ();
 			Vector3 rotated_offset = new Vector3 ();
 			rotated_offset.x = offset.x;
 			rotated_offset.y = offset.y;
