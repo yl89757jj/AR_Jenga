@@ -16,14 +16,19 @@ public class FreeModeController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		brickCountText.GetComponent<Text> ().text = numberOfBricks.ToString();
-		if (numberOfBricks <= 10) {
-			brickCountText.GetComponent<Text> ().color = lastColor;
+		if (!destructionMode) {
+			brickCountText.GetComponent<Text> ().text = numberOfBricks.ToString ();
+			if (numberOfBricks <= 10) {
+				brickCountText.GetComponent<Text> ().color = lastColor;
+			} else {
+				brickCountText.GetComponent<Text> ().color = normalColor;
+			}
+			if (numberOfBricks == 0) {
+				confirmButton.SetActive (true);
+			}
 		} else {
-			brickCountText.GetComponent<Text> ().color = normalColor;
-		}
-		if (numberOfBricks == 0) {
-			confirmButton.SetActive (true);
+			brickCountText.transform.parent.gameObject.GetComponent<Text> ().enabled = false;
+			brickCountText.GetComponent<Text> ().enabled = false;
 		}
 	}
 }

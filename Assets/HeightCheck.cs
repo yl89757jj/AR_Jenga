@@ -13,6 +13,10 @@ public class HeightCheck : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (this.gameObject.GetComponent<FreeModeController> ().destructionMode) {
+			heightText.GetComponent<Text> ().enabled = false;
+			return;
+		}
 		GameObject[] bricks = GameObject.FindGameObjectsWithTag ("Bricks");
 		if (bricks != null && bricks.Length > 0) {
 			float avg = 0f;
@@ -23,7 +27,9 @@ public class HeightCheck : MonoBehaviour {
 					num++;
 				}
 			}
-			avg /= num;
+			if (num > 0) {
+				avg /= num;
+			}
 			currentHeight = avg;
 		}
 		heightText.GetComponent<Text> ().text = "Height: " + currentHeight.ToString () + "/" + targetHeight.ToString ();

@@ -4,13 +4,9 @@ using System.Collections.Generic;
 
 public class FreeModeSelect : MonoBehaviour {
 	public Material select_material;
-	public Material highlight_material;
-	private Material original_material;
 	public GameObject selected_brick;
 	private GameObject try_brick;
 	public bool select_flag;
-	private int random;
-	public Vector3 collisionPos; //Jizhe add.
 	public GameObject gameController;
 	private float waitTime;
 
@@ -39,26 +35,36 @@ public class FreeModeSelect : MonoBehaviour {
 		if (other.gameObject.tag == "Bricks") {
 			if (try_brick == null) {
 				try_brick = other.gameObject;
-				original_material = other.GetComponent<Renderer> ().material;
-				other.GetComponent<Renderer> ().material = highlight_material;
+				other.GetComponent<Renderer> ().material = other.GetComponent<Brick>().hightlight_material;
 			} else if (!try_brick.Equals(other.gameObject)) {
 				waitTime = 0f;
-				try_brick.GetComponent<Renderer> ().material = original_material;
+				try_brick.GetComponent<Renderer> ().material = try_brick.GetComponent<Brick> ().original_material;
 				try_brick = other.gameObject;
-				original_material = try_brick.GetComponent<Renderer> ().material;
-				try_brick.GetComponent<Renderer> ().material = select_material;
+				try_brick.GetComponent<Renderer> ().material = other.GetComponent<Brick>().hightlight_material;
 				Debug.Log ("switch");
 			} else {
 				waitTime += Time.deltaTime;
 			}
 
-			if (waitTime > 2f && select_flag == false)
-				SuspendSelect ();
+			if (waitTime > 2f && select_flag == false) {
+				waitTime = 0;
+				if (!gameController.GetComponent<FreeModeController> ().destructionMode) {
+					SuspendSelect ();
+				} else {
+					select_flag = true;
+					selected_brick = try_brick;
+					try_brick = null;
+					if (selected_brick) {
+						Destroy (selected_brick);
+						gameController.GetComponent<ScoreManager> ().score += 100;
+					}
+				}
+			}
 		}
 	}
 		
 
-	//select after 5 seconds 
+	//select after 2 seconds 
 	void SuspendSelect(){
 		select_flag = true;
 		selected_brick = try_brick;
@@ -66,6 +72,7 @@ public class FreeModeSelect : MonoBehaviour {
 		if (selected_brick != null) {
 			selected_brick.transform.parent = transform;
 			selected_brick.GetComponent<Rigidbody> ().constraints = RigidbodyConstraints.FreezeAll;
+			selected_brick.GetComponent<Renderer> ().material = select_material;
 			GetComponent<Renderer> ().enabled = false;
 			GetComponent<Collider> ().enabled = false; 
 			gameController.GetComponent<GameStatus> ().inSelect = true;
@@ -75,11 +82,12 @@ public class FreeModeSelect : MonoBehaviour {
 	IEnumerator ToolbarDeselect()
 	{
 		if (selected_brick != null) {
-			selected_brick.GetComponent<Renderer> ().material = original_material;
+			selected_brick.GetComponent<Renderer> ().material = selected_brick.GetComponent<Brick>().original_material;
 			selected_brick.GetComponent<Collider> ().attachedRigidbody.constraints = RigidbodyConstraints.None;
+			selected_brick.GetComponent<Collider> ().attachedRigidbody.useGravity = true;
+			selected_brick.GetComponent<Collider> ().attachedRigidbody.isKinematic = false;
 			selected_brick.transform.parent = GameObject.Find ("Jenga").transform;
 			selected_brick = null;
-			original_material = null;
 			yield return new WaitForSeconds (1f);
 			select_flag = false;
 			GetComponent<Renderer> ().enabled = true;

@@ -4,9 +4,8 @@ using System.Collections;
 
 public class FinishConstruction : MonoBehaviour {
 	public GameObject freeModeController;
-	public GameObject jengaGame;
-	public GameObject placementText;
-	public GameObject range;
+	public GameObject heightWarning;
+	public GameObject lastPieceWarning;
 	// Use this for initialization
 	void Start () {
 	
@@ -18,7 +17,22 @@ public class FinishConstruction : MonoBehaviour {
 	}
 
 	public void Confirm() {
-		freeModeController.gameObject.GetComponent<FreeModeController> ().destructionMode = true;
-		this.gameObject.SetActive (false);
+		if (GameObject.Find ("Select").transform.childCount == 0) {
+			if (freeModeController.gameObject.GetComponent<HeightCheck> ().currentHeight
+			    > freeModeController.gameObject.GetComponent<HeightCheck> ().targetHeight) {
+				freeModeController.gameObject.GetComponent<FreeModeController> ().destructionMode = true;
+				this.gameObject.SetActive (false);
+			} else {
+				StartCoroutine (showText (heightWarning));
+			}
+		} else {
+			StartCoroutine (showText (lastPieceWarning));
+		}
+	}
+
+	IEnumerator showText(GameObject textObj) {
+		textObj.GetComponent<Text> ().enabled = true;
+		yield return new WaitForSeconds (2.0f);
+		textObj.GetComponent<Text> ().enabled = false;
 	}
 }

@@ -58,8 +58,10 @@ public class ToolBar_select : MonoBehaviour {
 					Debug.Log ("switch");
 				}
 
-				if (waitTime > 2f && select_flag == false)
+				if (waitTime > 2f && select_flag == false) {
+					waitTime = 0;
 					SuspendSelect ();
+				}
 			}
 		}
 	}
