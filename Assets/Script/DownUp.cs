@@ -35,8 +35,7 @@ public class DownUp : MonoBehaviour {
 					if (p.GetComponent<ToolBar_select> ().selected_brick)
 					{
 						p.GetComponent<ToolBar_select> ().selected_brick.transform.parent = null;
-						GetComponent<Image> ().color = Color.yellow;
-						GetComponent<GameStatus> ().inSelect = true;
+						GetComponent<Button>().GetComponent<Image> ().color = Color.yellow;
 					}
 			} else 
 			{
@@ -44,8 +43,7 @@ public class DownUp : MonoBehaviour {
 					if (p.GetComponent<ToolBar_select> ().selected_brick) 
 					{
 						p.GetComponent<ToolBar_select> ().selected_brick.transform.parent = p.transform;
-						GetComponent<Image> ().color = Color.white;
-						GetComponent<GameStatus> ().inSelect = false;
+						GetComponent<Button>().GetComponent<Image> ().color = Color.white;
 					}
 			
 
@@ -53,4 +51,5 @@ public class DownUp : MonoBehaviour {
 		}
 		buttonPressed = false;
 	}
+		
 }
