@@ -9,6 +9,8 @@ public class FreeModeController : MonoBehaviour {
 	public Color normalColor;
 	public Color lastColor;
 	public bool destructionMode = false;
+	public bool gameover = false;
+	public GameObject postGamePanel;
 	// Use this for initialization
 	void Start () {
 	
@@ -27,8 +29,16 @@ public class FreeModeController : MonoBehaviour {
 				confirmButton.SetActive (true);
 			}
 		} else {
-			brickCountText.transform.parent.gameObject.GetComponent<Text> ().enabled = false;
-			brickCountText.GetComponent<Text> ().enabled = false;
+			if (this.gameObject.GetComponent<HeightCheck> ().currentHeight
+				< this.gameObject.GetComponent<HeightCheck> ().targetHeight/2) {
+				//Game over
+				this.gameObject.GetComponent<ScoreManager>().getResult();
+				gameover = true;
+				int totalScore = this.gameObject.GetComponent<ScoreManager> ().score;
+				this.gameObject.GetComponent<ScoreManager> ().scoreBoard.GetComponent<Text> ().enabled = false;
+				postGamePanel.SetActive (true);
+				postGamePanel.GetComponentInChildren<Text> ().text = "Game over\nYour final score is:\n" + totalScore.ToString ();
+			}
 		}
 	}
 }

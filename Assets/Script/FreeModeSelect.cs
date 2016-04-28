@@ -15,23 +15,16 @@ public class FreeModeSelect : MonoBehaviour {
 		select_flag = false;
 		waitTime = 0f;
 	}
-
-
+		
 	void Update() {
 		if ((Input.GetMouseButtonDown(0) || Input.touchCount > 0) && select_flag)
 			StartCoroutine(ToolbarDeselect());
 	}
 
-	void OnTriggerEnter(Collider other) {
-		if (other.gameObject.tag == "Selector") {
-			gameController.GetComponent<GameStart> ().RestartPlaymode ();
-		}
-		if (other.gameObject.tag == "Virtual Stick") {
-			gameController.GetComponent<GameStart> ().RestartFreemode ();
-		}
-	}
-
 	void OnTriggerStay(Collider other) {
+		if (gameController.GetComponent<FreeModeController> ().gameover) {
+			return;
+		}
 		if (other.gameObject.tag == "Bricks") {
 			if (try_brick == null) {
 				try_brick = other.gameObject;
@@ -62,7 +55,6 @@ public class FreeModeSelect : MonoBehaviour {
 			}
 		}
 	}
-		
 
 	//select after 2 seconds 
 	void SuspendSelect(){

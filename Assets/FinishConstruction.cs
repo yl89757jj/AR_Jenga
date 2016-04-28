@@ -6,6 +6,7 @@ public class FinishConstruction : MonoBehaviour {
 	public GameObject freeModeController;
 	public GameObject heightWarning;
 	public GameObject lastPieceWarning;
+	public GameObject destructionHelp;
 	// Use this for initialization
 	void Start () {
 	
@@ -21,18 +22,20 @@ public class FinishConstruction : MonoBehaviour {
 			if (freeModeController.gameObject.GetComponent<HeightCheck> ().currentHeight
 			    > freeModeController.gameObject.GetComponent<HeightCheck> ().targetHeight) {
 				freeModeController.gameObject.GetComponent<FreeModeController> ().destructionMode = true;
+				GameObject.Find ("SpawnRegion").SetActive (false);
+				StartCoroutine (showText (destructionHelp, 5.0f));
 				this.gameObject.SetActive (false);
 			} else {
-				StartCoroutine (showText (heightWarning));
+				StartCoroutine (showText (heightWarning, 2.0f));
 			}
 		} else {
-			StartCoroutine (showText (lastPieceWarning));
+			StartCoroutine (showText (lastPieceWarning, 2.0f));
 		}
 	}
 
-	IEnumerator showText(GameObject textObj) {
+	IEnumerator showText(GameObject textObj, float time) {
 		textObj.GetComponent<Text> ().enabled = true;
-		yield return new WaitForSeconds (2.0f);
+		yield return new WaitForSeconds (time);
 		textObj.GetComponent<Text> ().enabled = false;
 	}
 }

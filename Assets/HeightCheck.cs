@@ -6,6 +6,7 @@ public class HeightCheck : MonoBehaviour {
 	public float targetHeight;
 	public float currentHeight = 0f;
 	public GameObject heightText;
+//	public float maxHeight = 0f;
 	// Use this for initialization
 	void Start () {
 	
@@ -31,6 +32,9 @@ public class HeightCheck : MonoBehaviour {
 				avg /= num;
 			}
 			currentHeight = avg;
+//			if (currentHeight > maxHeight) {
+//				maxHeight = currentHeight;
+//			}
 		}
 		heightText.GetComponent<Text> ().text = "Height: " + currentHeight.ToString () + "/" + targetHeight.ToString ();
 	}
