@@ -13,7 +13,7 @@ public class DownUp : MonoBehaviour {
 	void Update(){
 		if (buttonPressed == true) {
 			pressTime += Time.deltaTime;	
-			if (pressTime > 3)
+			if (pressTime > 2)
 				foreach (GameObject p in selectBall) { 
 					p.SendMessage ("ToolBar_deselect");
 					buttonPressed = false;
@@ -27,7 +27,7 @@ public class DownUp : MonoBehaviour {
 	}
 
 	public void buttonUp(){
-		if (pressTime < 2)
+		if (pressTime < 1)
 		{
 			if (!GetComponent<GameStatus> ().inSelect) 
 			{
