@@ -25,14 +25,15 @@ public class ButtonController : MonoBehaviour {
 	}
 
 	void Selectable (GameObject brick){
-		brick.GetComponent<Renderer>().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
+		Debug.Log (brick);
+		brick.GetComponent<Renderer>().material= brick.GetComponent<Brick> ().hightlight_material;
 		brick.GetComponent<Brick> ().selectable = true;
 	}
 
 	public void EndTurn(){
 		for (int i = 0; i < jenga.transform.childCount; i++) {
 			Transform unSelectableBrick = jenga.transform.GetChild(i); 
-			unSelectableBrick.GetComponent<Renderer>().material.shader = Shader.Find("Standard");
+			unSelectableBrick.GetComponent<Renderer>().material=unSelectableBrick.GetComponent<Brick> ().original_material;
 			unSelectableBrick.GetComponent<Brick> ().selectable = false;
 		}
 		newTurn = false;

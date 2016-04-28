@@ -19,7 +19,7 @@ public class ToolBar_select : MonoBehaviour {
 		gameController = GameObject.Find ("GameController");
 		newTurnButton = GameObject.Find ("NewTurn");
 		Debug.Log (newTurnButton);
-
+		try_brick = null;
 		select_flag = false;
 		waitTime = 0f;
 	}
@@ -44,18 +44,18 @@ public class ToolBar_select : MonoBehaviour {
 			Debug.Log ("NEW TURN  " + newTurn);
 			Debug.Log ("SELECTABLE   " + selectable);
 			if (newTurn && selectable) {
-				if (try_brick == null) {
-					try_brick = other.gameObject;
-					original_material = other.GetComponent<Renderer> ().material;
-					other.GetComponent<Renderer> ().material.shader = Shader.Find ("Outlined/Silhouette Only");
-				} else if (!try_brick.Equals(other.gameObject)) {
+				if (try_brick.Equals(null)) {
 					waitTime = 0f;
-					try_brick.GetComponent<Renderer> ().material.shader = Shader.Find ("Self-Illumin/Outlined Diffuse");
 					try_brick = other.gameObject;
-					try_brick.GetComponent<Renderer> ().material.shader = Shader.Find ("Outlined/Silhouette Only");
-					Debug.Log ("switch");
-				} else {
+					other.GetComponent<Renderer> ().material=other.GetComponent<Brick> ().tried_material;
+				}else if (try_brick.Equals(other.gameObject)) {
 					waitTime += Time.deltaTime;
+				} else {
+					waitTime = 0f;
+					try_brick.GetComponent<Renderer> ().material=try_brick.GetComponent<Brick> ().hightlight_material;
+					try_brick = other.gameObject;
+					try_brick.GetComponent<Renderer> ().material=try_brick.GetComponent<Brick> ().tried_material;
+					Debug.Log ("switch");
 				}
 
 				if (waitTime > 2f && select_flag == false)
@@ -91,7 +91,7 @@ public class ToolBar_select : MonoBehaviour {
 	{
 		if (selected_brick != null) {
 			selected_brick.GetComponent<Renderer> ().material = original_material;
-			selected_brick.GetComponent<Renderer> ().material.shader = Shader.Find ("Standard");
+			selected_brick.GetComponent<Renderer> ().material=selected_brick.GetComponent<Brick> ().original_material;
 			selected_brick.GetComponent<Collider> ().attachedRigidbody.constraints = RigidbodyConstraints.None;
 			selected_brick.transform.parent = GameObject.Find ("Jenga").transform;
 			selected_brick = null;
