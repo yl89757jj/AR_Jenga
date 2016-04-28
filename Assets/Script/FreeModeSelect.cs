@@ -17,8 +17,8 @@ public class FreeModeSelect : MonoBehaviour {
 	}
 		
 	void Update() {
-		if ((Input.GetMouseButtonDown(0) || Input.touchCount > 0) && select_flag)
-			StartCoroutine(ToolbarDeselect());
+//		if ((Input.GetMouseButtonDown(0) || Input.touchCount > 0) && select_flag)
+			//StartCoroutine(ToolbarDeselect());
 	}
 
 	void OnTriggerStay(Collider other) {
