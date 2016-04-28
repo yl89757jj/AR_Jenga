@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 
 public class DownUp : MonoBehaviour {
@@ -31,9 +32,10 @@ public class DownUp : MonoBehaviour {
 			if (!GetComponent<GameStatus> ().inSelect) 
 			{
 				foreach (GameObject p in selectBall)
-					if (p.GetComponent<ToolBar_select> ().selected_brick) 
+					if (p.GetComponent<ToolBar_select> ().selected_brick)
 					{
 						p.GetComponent<ToolBar_select> ().selected_brick.transform.parent = null;
+						GetComponent<Image> ().color = Color.yellow;
 						GetComponent<GameStatus> ().inSelect = true;
 					}
 			} else 
@@ -42,6 +44,7 @@ public class DownUp : MonoBehaviour {
 					if (p.GetComponent<ToolBar_select> ().selected_brick) 
 					{
 						p.GetComponent<ToolBar_select> ().selected_brick.transform.parent = p.transform;
+						GetComponent<Image> ().color = Color.white;
 						GetComponent<GameStatus> ().inSelect = false;
 					}
 			
