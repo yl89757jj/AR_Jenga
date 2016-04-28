@@ -78,8 +78,8 @@ namespace Vuforia
             // Enable rendering:
             foreach (Renderer component in rendererComponents)
             {
-                if (component.gameObject.name == "Select")
-                    component.enabled = !(GameObject.Find("Select").GetComponent<ToolBar_select>().select_flag);
+				if (component.transform.parent.name == "Bar")
+					component.enabled = !(GetComponentInChildren<ToolBar_select>().select_flag);
                 else
                     component.enabled = true;
             }
@@ -87,8 +87,8 @@ namespace Vuforia
             // Enable colliders:
             foreach (Collider component in colliderComponents)
             {
-                if (component.gameObject.name == "Select")
-                    component.enabled = !(GameObject.Find("Select").GetComponent<ToolBar_select>().select_flag);
+				if (component.transform.parent.name == "Bar")
+					component.enabled = !(GetComponentInChildren<ToolBar_select>().select_flag);
                 else
                     component.enabled = true;
             }

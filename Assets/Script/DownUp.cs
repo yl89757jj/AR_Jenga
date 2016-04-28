@@ -10,8 +10,14 @@ public class DownUp : MonoBehaviour {
 
 
 	void Update(){
-		if(buttonPressed == true)
+		if (buttonPressed == true) {
 			pressTime += Time.deltaTime;	
+			if (pressTime > 3)
+				foreach (GameObject p in selectBall) { 
+					p.SendMessage ("ToolBar_deselect");
+					buttonPressed = false;
+				}
+		}
 	}
 
 	public void buttonDown(){
@@ -20,26 +26,28 @@ public class DownUp : MonoBehaviour {
 	}
 
 	public void buttonUp(){
-		if (pressTime < 3)
-			foreach (GameObject p in selectBall)
-				p.SendMessage ("ToolBar_deselect");
-		else {
-			if (!GetComponent<GameStatus> ().inSelect) {
+		if (pressTime < 2)
+		{
+			if (!GetComponent<GameStatus> ().inSelect) 
+			{
 				foreach (GameObject p in selectBall)
-					if (p.GetComponent<ToolBar_select> ().selected_brick) {
+					if (p.GetComponent<ToolBar_select> ().selected_brick) 
+					{
 						p.GetComponent<ToolBar_select> ().selected_brick.transform.parent = null;
 						GetComponent<GameStatus> ().inSelect = true;
 					}
-			} else {
+			} else 
+			{
 				foreach (GameObject p in selectBall)
-					if (p.GetComponent<ToolBar_select> ().selected_brick) {
+					if (p.GetComponent<ToolBar_select> ().selected_brick) 
+					{
 						p.GetComponent<ToolBar_select> ().selected_brick.transform.parent = p.transform;
 						GetComponent<GameStatus> ().inSelect = false;
 					}
 			
+
 			}
-
-
 		}
+		buttonPressed = false;
 	}
 }

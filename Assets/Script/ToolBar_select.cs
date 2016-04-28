@@ -27,12 +27,6 @@ public class ToolBar_select : MonoBehaviour {
 
 	void Update() {
 		newTurn = newTurnButton.GetComponent<ButtonController> ().newTurn;
-		/*if ((Input.GetMouseButtonDown(0) || Input.touchCount > 0) && select_flag)
-			StartCoroutine(ToolbarDeselect());
-		if (Input.GetMouseButtonDown(1) && select_flag)
-			selected_brick.transform.parent = null;
-		if (Input.GetMouseButtonUp(1) && select_flag)
-			selected_brick.transform.parent = transform;*/
 	}
 
 	void OnTriggerEnter(Collider other) {
@@ -64,7 +58,7 @@ public class ToolBar_select : MonoBehaviour {
 					waitTime += Time.deltaTime;
 				}
 
-				if (waitTime > 5f && select_flag == false)
+				if (waitTime > 2f && select_flag == false)
 					SuspendSelect ();
 			}
 		}
@@ -103,6 +97,7 @@ public class ToolBar_select : MonoBehaviour {
 			selected_brick = null;
 			original_material = null;
 			yield return new WaitForSeconds (1f);
+
 			select_flag = false;
 			GetComponent<Renderer> ().enabled = true;
 			GetComponent<Collider> ().enabled = true;
