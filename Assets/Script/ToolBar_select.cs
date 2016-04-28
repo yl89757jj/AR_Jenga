@@ -44,13 +44,13 @@ public class ToolBar_select : MonoBehaviour {
 			Debug.Log ("NEW TURN  " + newTurn);
 			Debug.Log ("SELECTABLE   " + selectable);
 			if (newTurn && selectable) {
-				if (try_brick.Equals(null)) {
+				if (try_brick==null) {
 					waitTime = 0f;
 					try_brick = other.gameObject;
 					other.GetComponent<Renderer> ().material=other.GetComponent<Brick> ().tried_material;
-				}else if (try_brick.Equals(other.gameObject)) {
+				} else if (try_brick.Equals(other.gameObject)) {
 					waitTime += Time.deltaTime;
-				} else {
+				} else{
 					waitTime = 0f;
 					try_brick.GetComponent<Renderer> ().material=try_brick.GetComponent<Brick> ().hightlight_material;
 					try_brick = other.gameObject;
@@ -78,6 +78,9 @@ public class ToolBar_select : MonoBehaviour {
 			GetComponent<Collider> ().enabled = false; 
 			Debug.Log ("get");
 			collisionPos = transform.position; //Jizhe add;
+			SendMessage("EndTurn");
+			selected_brick.GetComponent<Brick> ().selectable = true;
+
 		}
 	}
 		
@@ -87,24 +90,27 @@ public class ToolBar_select : MonoBehaviour {
 		StartCoroutine (ToolbarDeselect());
 	}
 
+
 	IEnumerator ToolbarDeselect()
 	{
-		if (selected_brick != null) {
-			selected_brick.GetComponent<Renderer> ().material = original_material;
-			selected_brick.GetComponent<Renderer> ().material=selected_brick.GetComponent<Brick> ().original_material;
-			selected_brick.GetComponent<Collider> ().attachedRigidbody.constraints = RigidbodyConstraints.None;
-			selected_brick.transform.parent = GameObject.Find ("Jenga").transform;
-			selected_brick = null;
-			original_material = null;
-			yield return new WaitForSeconds (1f);
+		if (selected_brick.transform.position.x < 2.35 && selected_brick.transform.position.x > -2.35 && selected_brick.transform.position.z < 2.35 && selected_brick.transform.position.x > -2.35) {
+			if (selected_brick != null) {
+				selected_brick.GetComponent<Renderer> ().material = original_material;
+				selected_brick.GetComponent<Renderer> ().material = selected_brick.GetComponent<Brick> ().original_material;
+				selected_brick.GetComponent<Collider> ().attachedRigidbody.constraints = RigidbodyConstraints.None;
+				selected_brick.transform.parent = GameObject.Find ("Jenga").transform;
+				selected_brick = null;
+				original_material = null;
+				yield return new WaitForSeconds (1f);
 
-			select_flag = false;
-			GetComponent<Renderer> ().enabled = true;
-			GetComponent<Collider> ().enabled = true;
-			newTurn = false;
-			newTurnButton.SendMessage ("EndTurn");
-			newTurnButton.SendMessage ("NewTurn");
-			gameController.GetComponent<GameStatus> ().inSelect = false;
+				select_flag = false;
+				GetComponent<Renderer> ().enabled = true;
+				GetComponent<Collider> ().enabled = true;
+				newTurn = false;
+				newTurnButton.SendMessage ("EndTurn");
+				newTurnButton.SendMessage ("NewTurn");
+				gameController.GetComponent<GameStatus> ().inSelect = false;
+			}
 		}
 	}
 }

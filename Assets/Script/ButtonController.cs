@@ -13,19 +13,21 @@ public class ButtonController : MonoBehaviour {
 
 	//begin a new turen and randomly set the selectable bricks of player
 	public void NewTurn(){
-		newTurn = true;
-		Debug.Log (jenga.transform.childCount);
-		for (int i = 0; i < 10; i++) {
-			int random = Mathf.RoundToInt(Random.value*53);
-			Debug.Log (random);
-			Transform selectableBrick = jenga.transform.GetChild(random); 
-			Selectable (selectableBrick.gameObject);
+		if (newTurn == false) {
+			newTurn = true;
+			Debug.Log (jenga.transform.childCount);
+			for (int i = 0; i < 10; i++) {
+				int random = Mathf.RoundToInt (Random.value * 53);
+				Debug.Log (random);
+				Transform selectableBrick = jenga.transform.GetChild (random); 
+				Selectable (selectableBrick.gameObject);
+			}
+			Debug.Log ("STARTS");
 		}
-		Debug.Log ("STARTS");
 	}
 
 	void Selectable (GameObject brick){
-		Debug.Log (brick);
+		Debug.Log ("selectable"+brick);
 		brick.GetComponent<Renderer>().material= brick.GetComponent<Brick> ().hightlight_material;
 		brick.GetComponent<Brick> ().selectable = true;
 	}
