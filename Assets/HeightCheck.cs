@@ -6,7 +6,6 @@ public class HeightCheck : MonoBehaviour {
 	public float targetHeight;
 	public float currentHeight = 0f;
 	public GameObject heightText;
-//	public float maxHeight = 0f;
 	// Use this for initialization
 	void Start () {
 	
@@ -24,17 +23,13 @@ public class HeightCheck : MonoBehaviour {
 			int num = 0;
 			foreach (GameObject brick in bricks) {
 				if (brick.transform.parent.gameObject.name == "Jenga") {
-					avg += brick.transform.position.y;
-					num++;
+					GameObject tower = brick.transform.parent.gameObject;
+					float brickHeight = brick.transform.position.y - tower.transform.position.y;
+					if (currentHeight < brickHeight) {
+						currentHeight = brickHeight;
+					}
 				}
 			}
-			if (num > 0) {
-				avg /= num;
-			}
-			currentHeight = avg;
-//			if (currentHeight > maxHeight) {
-//				maxHeight = currentHeight;
-//			}
 		}
 		heightText.GetComponent<Text> ().text = "Height: " + currentHeight.ToString () + "/" + targetHeight.ToString ();
 	}

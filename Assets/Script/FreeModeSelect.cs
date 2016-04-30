@@ -44,7 +44,7 @@ public class FreeModeSelect : MonoBehaviour {
 				if (!gameController.GetComponent<FreeModeController> ().destructionMode) {
 					SuspendSelect ();
 				} else {
-					select_flag = true;
+					select_flag = false;
 					selected_brick = try_brick;
 					try_brick = null;
 					if (selected_brick) {
