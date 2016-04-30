@@ -67,11 +67,10 @@ public class FreeModeSelect : MonoBehaviour {
 			selected_brick.GetComponent<Renderer> ().material = select_material;
 			GetComponent<Renderer> ().enabled = false;
 			GetComponent<Collider> ().enabled = false; 
-			gameController.GetComponent<GameStatus> ().inSelect = true;
 		}
 	}
 		
-	IEnumerator ToolbarDeselect()
+	IEnumerator ToolBar_deselect()
 	{
 		if (selected_brick != null) {
 			selected_brick.GetComponent<Renderer> ().material = selected_brick.GetComponent<Brick>().original_material;

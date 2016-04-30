@@ -30,8 +30,6 @@ public class Drawline : MonoBehaviour {
 		} else if (this.gameObject.name == "Select" && this.gameObject.transform.childCount == 0 
 			&& this.gameObject.GetComponent<Renderer>().enabled) {
 			hideCollision ();
-			Vector3 rotated_offset = new Vector3 ();
-			Quaternion rot = this.transform.rotation;
 			origin = this.gameObject.transform.position;
 			drawCollision ();
 		}

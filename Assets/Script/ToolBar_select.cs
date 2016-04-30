@@ -82,7 +82,6 @@ public class ToolBar_select : MonoBehaviour {
 			collisionPos = transform.position; //Jizhe add;
 			SendMessage("EndTurn");
 			selected_brick.GetComponent<Brick> ().selectable = true;
-
 		}
 	}
 		

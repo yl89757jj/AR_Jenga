@@ -17,15 +17,16 @@ public class CreateBrick : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		pickupText.GetComponent<Text> ().enabled = false;
-		spawnLocation = new Vector3 (-15.56f, 1.84f, -13.92f);
+		spawnLocation = new Vector3 (-11.5f, 1.84f, -10.3f);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (recentCreated != null && recentCreated.transform.parent.gameObject.name != "SpawnRegion") {
-			pickupText.GetComponent<Text> ().enabled = false;
+		if (recentCreated != null && recentCreated.transform.parent.gameObject.name == "SpawnRegion") {
+			pickupText.GetComponent<Text> ().enabled = true;
 			readyToCreate = false;
 		} else {
+			pickupText.GetComponent<Text> ().enabled = false;
 			readyToCreate = true;
 		}
 		if (freeModeController.GetComponent<FreeModeController> ().numberOfBricks == 0) {
