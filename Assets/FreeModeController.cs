@@ -30,15 +30,21 @@ public class FreeModeController : MonoBehaviour {
 			}
 		} else {
 			if (this.gameObject.GetComponent<HeightCheck> ().currentHeight
-				< this.gameObject.GetComponent<HeightCheck> ().targetHeight/2) {
+				< this.gameObject.GetComponent<HeightCheck> ().targetHeight/2 || GameObject.Find ("Jenga").transform.childCount == 0) {
 				//Game over
-				this.gameObject.GetComponent<ScoreManager>().getResult();
-				gameover = true;
-				int totalScore = this.gameObject.GetComponent<ScoreManager> ().score;
-				this.gameObject.GetComponent<ScoreManager> ().scoreBoard.GetComponent<Text> ().enabled = false;
-				postGamePanel.SetActive (true);
-				postGamePanel.GetComponentInChildren<Text> ().text = "Game over\nYour final score is:\n" + totalScore.ToString ();
+				endGame();
 			}
+		}
+	}
+
+	void endGame() {
+		if (!postGamePanel.activeSelf) {
+			this.gameObject.GetComponent<ScoreManager>().getResult();
+			gameover = true;
+			int totalScore = this.gameObject.GetComponent<ScoreManager> ().score;
+			this.gameObject.GetComponent<ScoreManager> ().scoreBoard.GetComponent<Text> ().enabled = false;
+			postGamePanel.SetActive (true);
+			postGamePanel.GetComponentInChildren<Text> ().text = "Game over\nYour final score is:\n" + totalScore.ToString ();
 		}
 	}
 }

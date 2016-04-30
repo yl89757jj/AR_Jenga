@@ -22,7 +22,7 @@ public class CreateBrick : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (recentCreated != null && recentCreated.transform.parent.gameObject.name == "SpawnRegion") {
+		if (recentCreated != null && recentCreated.transform.parent != null && recentCreated.transform.parent.gameObject.name == "SpawnRegion") {
 			pickupText.GetComponent<Text> ().enabled = true;
 			readyToCreate = false;
 		} else {
@@ -30,6 +30,7 @@ public class CreateBrick : MonoBehaviour {
 			readyToCreate = true;
 		}
 		if (freeModeController.GetComponent<FreeModeController> ().numberOfBricks == 0) {
+			pickupText.GetComponent<Text> ().enabled = false;
 			this.gameObject.SetActive (false);
 		}
 	}

@@ -62,7 +62,7 @@ public class FreeModeSelect : MonoBehaviour {
 		selected_brick = try_brick;
 		try_brick = null;
 		if (selected_brick != null) {
-			selected_brick.transform.parent = transform;
+			selected_brick.transform.parent = this.gameObject.transform;
 			selected_brick.GetComponent<Rigidbody> ().constraints = RigidbodyConstraints.FreezeAll;
 			selected_brick.GetComponent<Renderer> ().material = select_material;
 			GetComponent<Renderer> ().enabled = false;

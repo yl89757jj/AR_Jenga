@@ -6,6 +6,7 @@ public class HeightCheck : MonoBehaviour {
 	public float targetHeight;
 	public float currentHeight = 0f;
 	public GameObject heightText;
+	private Vector3 centerOffset = new Vector3 (2.287587f, 0.377825f, 0.7604125f);
 	// Use this for initialization
 	void Start () {
 	
@@ -15,22 +16,25 @@ public class HeightCheck : MonoBehaviour {
 	void Update () {
 		if (this.gameObject.GetComponent<FreeModeController> ().destructionMode) {
 			heightText.GetComponent<Text> ().enabled = false;
-			return;
 		}
 		GameObject[] bricks = GameObject.FindGameObjectsWithTag ("Bricks");
 		if (bricks != null && bricks.Length > 0) {
-			float avg = 0f;
-			int num = 0;
+			float maxH = 0f;
 			foreach (GameObject brick in bricks) {
-				if (brick.transform.parent.gameObject.name == "Jenga") {
+				if (brick.transform.parent != null && brick.transform.parent.gameObject.name == "Jenga") {
 					GameObject tower = brick.transform.parent.gameObject;
-					float brickHeight = brick.transform.position.y - tower.transform.position.y;
-					if (currentHeight < brickHeight) {
-						currentHeight = brickHeight;
+					Vector3 cord = brick.transform.position;
+					Vector3 rotCord = brick.transform.rotation * centerOffset;
+					float h = cord.y + rotCord.y - tower.transform.position.y;
+					if (h > maxH) {
+						maxH = h;
 					}
 				}
 			}
+			currentHeight = maxH;
 		}
-		heightText.GetComponent<Text> ().text = "Height: " + currentHeight.ToString () + "/" + targetHeight.ToString ();
+		int len = currentHeight.ToString ().Length;
+		string heightStr = currentHeight.ToString ().Substring (0, Mathf.Min (4, len));
+		heightText.GetComponent<Text> ().text = "Height: " + heightStr + "/" + targetHeight.ToString ();
 	}
 }

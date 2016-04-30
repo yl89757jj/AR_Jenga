@@ -17,7 +17,7 @@ public class Drawline : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (this.gameObject.tag == "Bricks" && this.gameObject.transform.parent != null 
-			&& this.gameObject.transform.parent.gameObject.name == "Select") {
+			&& this.gameObject.transform.parent.gameObject.tag == "Selector") {
 			hideCollision ();
 			Vector3 rotated_offset = new Vector3 ();
 			rotated_offset.x = offset.x;
@@ -27,7 +27,7 @@ public class Drawline : MonoBehaviour {
 			rotated_offset = rot * rotated_offset;
 			origin = this.gameObject.transform.position + rotated_offset;
 			drawCollision ();
-		} else if (this.gameObject.name == "Select" && this.gameObject.transform.childCount == 0 
+		} else if (this.gameObject.tag == "Selector" && this.gameObject.transform.childCount == 0 
 			&& this.gameObject.GetComponent<Renderer>().enabled) {
 			hideCollision ();
 			origin = this.gameObject.transform.position;
