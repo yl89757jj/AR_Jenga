@@ -8,6 +8,7 @@ public class RangeIndication : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		this.gameObject.GetComponent<Renderer> ().enabled = false;
+		showHint = false;
 	}
 	
 	// Update is called once per frame

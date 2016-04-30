@@ -13,7 +13,9 @@ public class ToolBar_select : MonoBehaviour {
 	public Vector3 collisionPos; //Jizhe add.
 	private GameObject newTurnButton;
 	public GameObject gameController;
+	public GameObject Indicator;
 	private float waitTime;
+	private Vector3 offset = new Vector3(2.287587f, 0.377825f, 0.7604125f);
 
 	void Start() {
 		gameController = GameObject.Find ("GameController");
@@ -26,6 +28,22 @@ public class ToolBar_select : MonoBehaviour {
 
 
 	void Update() {
+		if (!select_flag)
+			Indicator.GetComponent<RangeIndication> ().showHint = false;
+		if (select_flag) {
+			/*Vector3 rotated_offset = new Vector3 ();
+			rotated_offset.x = offset.x;
+			rotated_offset.y = offset.y;
+			rotated_offset.z = offset.z;
+			Quaternion rot = selected_brick.transform.rotation;
+			rotated_offset = rot * rotated_offset;
+			Vector3 OFFSET = selected_brick.transform.position + rotated_offset - Indicator.transform.position;
+			Vector3 RANGE = Indicator.transform.lossyScale;
+			//if(OFFSET.x< RANGE.x && OFFSET.y<RANGE.y && OFFSET.z<RANGE.z)
+			//	Indicator.GetComponent<RangeIndication> ().showHint = false;
+			//else*/
+				Indicator.GetComponent<RangeIndication> ().showHint = true;
+		}
 		newTurn = newTurnButton.GetComponent<ButtonController> ().newTurn;
 	}
 
@@ -80,7 +98,7 @@ public class ToolBar_select : MonoBehaviour {
 			GetComponent<Collider> ().enabled = false; 
 			Debug.Log ("get");
 			collisionPos = transform.position; //Jizhe add;
-			SendMessage("EndTurn");
+			newTurnButton.SendMessage("EndTurn");
 			selected_brick.GetComponent<Brick> ().selectable = true;
 		}
 	}
