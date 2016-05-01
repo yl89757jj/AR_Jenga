@@ -15,6 +15,9 @@ public class ButtonController : MonoBehaviour {
 	public void NewTurn(){
 		if (newTurn == false) {
 			newTurn = true;
+			foreach (Transform brick in jenga.transform){
+				brick.gameObject.GetComponent<Brick> ().selected=false;
+			}
 			for (int i = 0; i < 10; i++) {
 				int random = Mathf.RoundToInt (Random.value * 53);
 				Transform selectableBrick = jenga.transform.GetChild (random); 

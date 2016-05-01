@@ -47,8 +47,7 @@ public class ToolBar_select : MonoBehaviour {
 			//else*/
 				Indicator.GetComponent<RangeIndication> ().showHint = true;
 		}
-		newTurn = gameController.GetComponent<ButtonController> ().newTurn;
-		Debug.Log ("New turn:" + newTurn);
+
 	}
 
 	void OnTriggerEnter(Collider other) {
@@ -64,7 +63,7 @@ public class ToolBar_select : MonoBehaviour {
 		Debug.Log (other);
 		if (other.gameObject.tag == "Bricks") {
 			bool selectable = other.GetComponent<Brick> ().selectable;
-			if (newTurn && selectable) {
+			if (selectable) {
 				if (try_brick==null) {
 					waitTime = 0f;
 					try_brick = other.gameObject;
@@ -96,11 +95,12 @@ public class ToolBar_select : MonoBehaviour {
 			selected_brick.transform.parent = transform;
 			selected_brick.GetComponent<Renderer> ().material = select_material;
 			selected_brick.GetComponent<Rigidbody> ().constraints = RigidbodyConstraints.FreezeAll;
+			selected_brick.GetComponent<Brick> ().selected = true;
+			Debug.Log ("Brick"+selected_brick.GetComponent<Brick> ().selected);
 			GetComponent<Renderer> ().enabled = false;
 			GetComponent<Collider> ().enabled = false; 
 			collisionPos = transform.position; //Jizhe add;
 			gameController.SendMessage("EndTurn");
-			Debug.Log ("Get new tern"+newTurn);
 			//selected_brick.GetComponent<Brick> ().selectable = true;
 		}
 	}

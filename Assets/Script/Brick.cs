@@ -6,9 +6,11 @@ public class Brick : MonoBehaviour {
 	public Material original_material;
 	public Material hightlight_material;
 	public Material tried_material;
+	public bool selected;
 
 	// Use this for initialization
 	void Start () {
+		selected = false;
 		selectable = false;
 		original_material = transform.GetComponent<Renderer> ().material;
 

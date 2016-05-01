@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class GameEndCheck : MonoBehaviour {
     public Text GameOver;
-    public GameObject Toolbar;
+ //   public GameObject Toolbar;
     private GameObject brickselected = null;
 	private bool collide_flag;
 	public GameObject gameController;
@@ -18,16 +18,16 @@ public class GameEndCheck : MonoBehaviour {
 		gameController = GameObject.Find("GameController");
 		next_turn_wait = 0f;
 		nextTurn = false;
+		brickselected = null;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        brickselected = Toolbar.GetComponent<ToolBar_select>().selected_brick;
-		if (nextTurn) {
+		if (nextTurn&&!collide_flag) {
 			next_turn_wait += Time.deltaTime;
 		}
 		if (next_turn_wait > 3f &&!collide_flag) {
-			Debug.Log ("NextTurn");
+   //		brickselected.GetComponent<Brick> ().selected = false;
 			gameController.SendMessage ("NewTurn");
 			GameObject[] selectors = GameObject.FindGameObjectsWithTag ("Selector");
 			foreach (GameObject sel in selectors) {
@@ -39,16 +39,15 @@ public class GameEndCheck : MonoBehaviour {
 			nextTurn = false;
 			next_turn_wait = 0f;
 		}
-		Debug.Log(next_turn_wait):
+		Debug.Log (next_turn_wait);
    	}
 
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Bricks")
         {
-            if (!collision.gameObject.Equals(brickselected))
+			if (!collision.gameObject.GetComponent<Brick> ().selected)
             {
-				Debug.Log (brickselected);
                 foreach (ContactPoint contact in collision.contacts)
                 {
                     Vector3 offset = contact.point - transform.position;
@@ -57,22 +56,31 @@ public class GameEndCheck : MonoBehaviour {
 						GameOver.enabled = true;
 						gameController.SendMessage ("EndTurn");
 						collide_flag = true;
+						nextTurn = false;
+						next_turn_wait = 0f;
 					}
                 }
 			}
-			else{
+			else if (collision.gameObject.GetComponent<Brick> ().selected&&collision.transform.parent.tag!="Selector"){
 				collide_flag = true;
+				nextTurn = false;
+				next_turn_wait = 0f;
 				Debug.Log("Please Repick the brick");
-				brickselected.gameObject.GetComponent<Brick> ().selectable = true;
+				collision.gameObject.GetComponent<Brick> ().selectable = true;
+				collision.gameObject.GetComponent<Renderer>().material=collision.gameObject.GetComponent<Brick> ().hightlight_material;
 			}
 
 		}
-
+		else {
+			nextTurn = false;
+			next_turn_wait = 0f;
+		}
 	}
 
 	public void NextTurn(){
 		next_turn_wait = 0f;
 		nextTurn = true;
+	
 	}
 }
 
