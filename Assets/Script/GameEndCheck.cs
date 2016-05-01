@@ -6,14 +6,40 @@ public class GameEndCheck : MonoBehaviour {
     public Text GameOver;
     public GameObject Toolbar;
     private GameObject brickselected = null;
+	private bool collide_flag;
+	public GameObject gameController;
+	private float next_turn_wait;
+	private bool nextTurn;
+
 	// Use this for initialization
 	void Start () {
         GameOver.enabled = false;
+		collide_flag = false;
+		gameController = GameObject.Find("GameController");
+		next_turn_wait = 0f;
+		nextTurn = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
         brickselected = Toolbar.GetComponent<ToolBar_select>().selected_brick;
+		if (nextTurn) {
+			next_turn_wait += Time.deltaTime;
+		}
+		if (next_turn_wait > 3f &&!collide_flag) {
+			Debug.Log ("NextTurn");
+			gameController.SendMessage ("NewTurn");
+			GameObject[] selectors = GameObject.FindGameObjectsWithTag ("Selector");
+			foreach (GameObject sel in selectors) {
+	//			sel.GetComponent<ToolBar_select> ().selected_brick = null;
+	//			sel.GetComponent<ToolBar_select> ().try_brick = null;
+				sel.GetComponent<ToolBar_select> ().select_flag = false;
+				sel.GetComponent<ToolBar_select> ().waitTime = 0f;
+			}
+			nextTurn = false;
+			next_turn_wait = 0f;
+		}
+		Debug.Log(next_turn_wait):
    	}
 
     void OnCollisionEnter(Collision collision)
@@ -22,18 +48,31 @@ public class GameEndCheck : MonoBehaviour {
         {
             if (!collision.gameObject.Equals(brickselected))
             {
+				Debug.Log (brickselected);
                 foreach (ContactPoint contact in collision.contacts)
                 {
                     Vector3 offset = contact.point - transform.position;
-                    Debug.Log(offset);
-                    if (offset.magnitude > 3.5)
-                        GameOver.enabled = true;
+
+					if (offset.magnitude > 3.5) {
+						GameOver.enabled = true;
+						gameController.SendMessage ("EndTurn");
+						collide_flag = true;
+					}
                 }
-            }
-            else
-                Debug.Log("Please Replace the brick");
-        }
-    }
+			}
+			else{
+				collide_flag = true;
+				Debug.Log("Please Repick the brick");
+				brickselected.gameObject.GetComponent<Brick> ().selectable = true;
+			}
 
+		}
 
+	}
+
+	public void NextTurn(){
+		next_turn_wait = 0f;
+		nextTurn = true;
+	}
 }
+

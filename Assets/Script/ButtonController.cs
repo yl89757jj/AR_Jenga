@@ -15,19 +15,15 @@ public class ButtonController : MonoBehaviour {
 	public void NewTurn(){
 		if (newTurn == false) {
 			newTurn = true;
-			Debug.Log (jenga.transform.childCount);
 			for (int i = 0; i < 10; i++) {
 				int random = Mathf.RoundToInt (Random.value * 53);
-				Debug.Log (random);
 				Transform selectableBrick = jenga.transform.GetChild (random); 
 				Selectable (selectableBrick.gameObject);
 			}
-			Debug.Log ("STARTS");
 		}
 	}
 
 	void Selectable (GameObject brick){
-		Debug.Log ("selectable"+brick);
 		brick.GetComponent<Renderer>().material= brick.GetComponent<Brick> ().hightlight_material;
 		brick.GetComponent<Brick> ().selectable = true;
 	}
@@ -39,7 +35,6 @@ public class ButtonController : MonoBehaviour {
 			unSelectableBrick.GetComponent<Brick> ().selectable = false;
 		}
 		newTurn = false;
-		Debug.Log ("End Turn");
 	}
 
 	// Update is called once per frame

@@ -148,7 +148,8 @@ namespace Vuforia
               
             }
             GameStart = true;
-
+//			gameController=GameObject.Find ("GameController");
+			gameController.SendMessage ("NewTurn");
         }
 
         #endregion // PRIVATE_METHODS

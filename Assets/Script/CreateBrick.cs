@@ -11,6 +11,7 @@ public class CreateBrick : MonoBehaviour {
 	public GameObject newBrickText;
 	public GameObject jengaGame;
 	public GameObject freeModeController;
+
 	private GameObject recentCreated;
 	private Vector3 spawnLocation;
 	private bool readyToCreate = true;

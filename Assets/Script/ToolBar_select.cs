@@ -4,32 +4,35 @@ using System.Collections.Generic;
 
 public class ToolBar_select : MonoBehaviour {
 	public Material select_material;
-	private Material original_material;
 	public GameObject selected_brick;
-	private GameObject try_brick;
+	public GameObject try_brick;
 	public bool select_flag;
-	private bool newTurn;
+	public bool newTurn;
 	private int random;
 	public Vector3 collisionPos; //Jizhe add.
-	private GameObject newTurnButton;
-	public GameObject gameController;
+	private GameObject gameController;
 	public GameObject Indicator;
-	private float waitTime;
+	public float waitTime;
+	private GameObject ground;
 	private Vector3 offset = new Vector3(2.287587f, 0.377825f, 0.7604125f);
+
 
 	void Start() {
 		gameController = GameObject.Find ("GameController");
-		newTurnButton = GameObject.Find ("NewTurn");
-		Debug.Log (newTurnButton);
+		ground=GameObject.Find ("Ground");
 		try_brick = null;
 		select_flag = false;
 		waitTime = 0f;
+		selected_brick = null;
+
+
 	}
 
 
 	void Update() {
-		if (!select_flag)
+		if (!select_flag) {
 			Indicator.GetComponent<RangeIndication> ().showHint = false;
+		}
 		if (select_flag) {
 			/*Vector3 rotated_offset = new Vector3 ();
 			rotated_offset.x = offset.x;
@@ -44,7 +47,8 @@ public class ToolBar_select : MonoBehaviour {
 			//else*/
 				Indicator.GetComponent<RangeIndication> ().showHint = true;
 		}
-		newTurn = newTurnButton.GetComponent<ButtonController> ().newTurn;
+		newTurn = gameController.GetComponent<ButtonController> ().newTurn;
+		Debug.Log ("New turn:" + newTurn);
 	}
 
 	void OnTriggerEnter(Collider other) {
@@ -57,15 +61,14 @@ public class ToolBar_select : MonoBehaviour {
 	}
 
 	void OnTriggerStay(Collider other) {
+		Debug.Log (other);
 		if (other.gameObject.tag == "Bricks") {
 			bool selectable = other.GetComponent<Brick> ().selectable;
-			Debug.Log ("NEW TURN  " + newTurn);
-			Debug.Log ("SELECTABLE   " + selectable);
 			if (newTurn && selectable) {
 				if (try_brick==null) {
 					waitTime = 0f;
 					try_brick = other.gameObject;
-					other.GetComponent<Renderer> ().material=other.GetComponent<Brick> ().tried_material;
+					try_brick.GetComponent<Renderer> ().material=other.GetComponent<Brick> ().tried_material;
 				} else if (try_brick.Equals(other.gameObject)) {
 					waitTime += Time.deltaTime;
 				} else{
@@ -73,7 +76,6 @@ public class ToolBar_select : MonoBehaviour {
 					try_brick.GetComponent<Renderer> ().material=try_brick.GetComponent<Brick> ().hightlight_material;
 					try_brick = other.gameObject;
 					try_brick.GetComponent<Renderer> ().material=try_brick.GetComponent<Brick> ().tried_material;
-					Debug.Log ("switch");
 				}
 
 				if (waitTime > 2f && select_flag == false) {
@@ -96,10 +98,10 @@ public class ToolBar_select : MonoBehaviour {
 			selected_brick.GetComponent<Rigidbody> ().constraints = RigidbodyConstraints.FreezeAll;
 			GetComponent<Renderer> ().enabled = false;
 			GetComponent<Collider> ().enabled = false; 
-			Debug.Log ("get");
 			collisionPos = transform.position; //Jizhe add;
-			newTurnButton.SendMessage("EndTurn");
-			selected_brick.GetComponent<Brick> ().selectable = true;
+			gameController.SendMessage("EndTurn");
+			Debug.Log ("Get new tern"+newTurn);
+			//selected_brick.GetComponent<Brick> ().selectable = true;
 		}
 	}
 		
@@ -111,25 +113,21 @@ public class ToolBar_select : MonoBehaviour {
 
 
 	IEnumerator ToolbarDeselect()
-	{
-		if (selected_brick.transform.position.x < 2.35 && selected_brick.transform.position.x > -2.35 && selected_brick.transform.position.z < 2.35 && selected_brick.transform.position.x > -2.35) {
+	{		
 			if (selected_brick != null) {
-				selected_brick.GetComponent<Renderer> ().material = original_material;
 				selected_brick.GetComponent<Renderer> ().material = selected_brick.GetComponent<Brick> ().original_material;
 				selected_brick.GetComponent<Collider> ().attachedRigidbody.constraints = RigidbodyConstraints.None;
 				selected_brick.transform.parent = GameObject.Find ("Jenga").transform;
-				selected_brick = null;
-				original_material = null;
 				yield return new WaitForSeconds (1f);
-
 				select_flag = false;
 				GetComponent<Renderer> ().enabled = true;
 				GetComponent<Collider> ().enabled = true;
 				newTurn = false;
-				newTurnButton.SendMessage ("EndTurn");
-				newTurnButton.SendMessage ("NewTurn");
-				gameController.GetComponent<GameStatus> ().inSelect = false;
+			gameController.SendMessage ("EndTurn");
+			gameController.GetComponent<GameStatus> ().inSelect = false;
+			ground.SendMessage ("NextTurn");
+
 			}
-		}
+
 	}
 }
