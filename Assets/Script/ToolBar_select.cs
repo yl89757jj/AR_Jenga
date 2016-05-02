@@ -30,21 +30,21 @@ public class ToolBar_select : MonoBehaviour {
 
 
 	void Update() {
-		if (!select_flag) {
-			Indicator.GetComponent<RangeIndication> ().showHint = false;
-		}
 		if (select_flag) {
-			/*Vector3 rotated_offset = new Vector3 ();
+			Vector3 rotated_offset = new Vector3 ();
 			rotated_offset.x = offset.x;
 			rotated_offset.y = offset.y;
 			rotated_offset.z = offset.z;
 			Quaternion rot = selected_brick.transform.rotation;
 			rotated_offset = rot * rotated_offset;
-			Vector3 OFFSET = selected_brick.transform.position + rotated_offset - Indicator.transform.position;
-			Vector3 RANGE = Indicator.transform.lossyScale;
-			//if(OFFSET.x< RANGE.x && OFFSET.y<RANGE.y && OFFSET.z<RANGE.z)
-			//	Indicator.GetComponent<RangeIndication> ().showHint = false;
-			//else*/
+			Vector3 localP = Indicator.transform.InverseTransformPoint(selected_brick.transform.position + rotated_offset);
+			Vector3 range = Indicator.transform.localScale;
+			Debug.Log (localP);
+			Debug.Log (range);
+			if (Mathf.Abs(localP.x/range.x) < 0.5 && Mathf.Abs(localP.y/range.y) < 0.5 && Mathf.Abs(localP.z/range.z) < 0.5) {
+				Indicator.GetComponent<RangeIndication> ().showHint = false;
+			}
+			else
 				Indicator.GetComponent<RangeIndication> ().showHint = true;
 		}
 
@@ -101,6 +101,7 @@ public class ToolBar_select : MonoBehaviour {
 			GetComponent<Collider> ().enabled = false; 
 			collisionPos = transform.position; //Jizhe add;
 			gameController.SendMessage("EndTurn");
+			Indicator.GetComponent<RangeIndication> ().showHint = true;
 			//selected_brick.GetComponent<Brick> ().selectable = true;
 		}
 	}
@@ -123,6 +124,7 @@ public class ToolBar_select : MonoBehaviour {
 				GetComponent<Renderer> ().enabled = true;
 				GetComponent<Collider> ().enabled = true;
 				newTurn = false;
+			Indicator.GetComponent<RangeIndication> ().showHint = false;
 			gameController.SendMessage ("EndTurn");
 			gameController.GetComponent<GameStatus> ().inSelect = false;
 			ground.SendMessage ("NextTurn");
