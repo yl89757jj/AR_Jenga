@@ -22,11 +22,11 @@ public class RangeIndication : MonoBehaviour {
 			Color newColor = mat.color;
 			newColor.a += delta;
 			this.gameObject.GetComponent<Renderer> ().material.color = newColor;
-			if (this.gameObject.GetComponent<Renderer> ().material.color.a > 0.95f) {
-				delta = -0.05f;
+			if (this.gameObject.GetComponent<Renderer> ().material.color.a > 0.2f) {
+				delta = -0.01f;
 			}
-			if (this.gameObject.GetComponent<Renderer> ().material.color.a <0.05f) {
-				delta = 0.05f;
+			if (this.gameObject.GetComponent<Renderer> ().material.color.a <0.01f) {
+				delta = 0.01f;
 			}
 		} else {
 			this.gameObject.GetComponent<Renderer> ().enabled = false;

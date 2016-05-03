@@ -41,9 +41,8 @@ public class ToolBar_select : MonoBehaviour {
 			Vector3 range = Indicator.transform.localScale;
 			Debug.Log (localP);
 			Debug.Log (range);
-			if (Mathf.Abs(localP.x/range.x) < 0.5 && Mathf.Abs(localP.y/range.y) < 0.5 && Mathf.Abs(localP.z/range.z) < 0.5) {
+			if (Mathf.Abs(localP.x/range.x) < 1.0 && Mathf.Abs(localP.y/range.y) < 1.0 && Mathf.Abs(localP.z/range.z) < 1.0)
 				Indicator.GetComponent<RangeIndication> ().showHint = false;
-			}
 			else
 				Indicator.GetComponent<RangeIndication> ().showHint = true;
 		}
