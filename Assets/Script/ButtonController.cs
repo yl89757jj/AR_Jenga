@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class ButtonController : MonoBehaviour {
 	public bool newTurn;
 //	private ArrayList selectableBricks= new ArrayList();
 	private GameObject jenga;
+	private float timer = -1;
+	public Text message;
 	// Use this for initialization
 	void Start () {
 		newTurn = false;
@@ -14,6 +17,8 @@ public class ButtonController : MonoBehaviour {
 	//begin a new turen and randomly set the selectable bricks of player
 	public void NewTurn(){
 		if (newTurn == false) {
+			timer = 0;
+			message.enabled = true;
 			newTurn = true;
 			foreach (Transform brick in jenga.transform){
 				brick.gameObject.GetComponent<Brick> ().selected=false;
@@ -42,6 +47,12 @@ public class ButtonController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-	
+		if (timer < 2.5 && timer >= 0)
+			timer += Time.deltaTime;
+		else {
+			timer = -1;
+			message.enabled = false;
+		}
+		
 	}
 }

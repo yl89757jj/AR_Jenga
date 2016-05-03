@@ -19,6 +19,9 @@ public class GameStart : MonoBehaviour {
 	public void RestartPlaymode() {
 		SceneManager.LoadScene ("FinalProject");
 	}
+	public void BacktoMenu(){
+		SceneManager.LoadScene ("menu");
+	}
 
 	public void RestartFreemode() {
 		SceneManager.LoadScene ("FreeMode");

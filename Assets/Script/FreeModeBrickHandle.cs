@@ -37,7 +37,7 @@ public class FreeModeBrickHandle : MonoBehaviour
 				foreach (GameObject p in selectBall)
 					if (p.GetComponent<FreeModeSelect> ().selected_brick) {
 						p.GetComponent<FreeModeSelect> ().selected_brick.transform.parent = null;
-						GameObject.Find ("BrickBehaviorManager").GetComponent<Image> ().color = Color.yellow;
+						GameObject.Find ("BrickBehaviorManager").GetComponent<Image> ().color = Color.gray;
 						status = 1;
 					}
 			} else {
