@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class FreeModeSelect : MonoBehaviour {
+	private AudioSource audio_s;
 	public Material select_material;
 	public GameObject selected_brick;
 	private GameObject try_brick;
@@ -11,6 +12,7 @@ public class FreeModeSelect : MonoBehaviour {
 	private float waitTime;
 
 	void Start() {
+		audio_s = GetComponent<AudioSource> ();
 		gameController = GameObject.Find ("GameController");
 		select_flag = false;
 		waitTime = 0f;
@@ -59,6 +61,7 @@ public class FreeModeSelect : MonoBehaviour {
 	//select after 2 seconds 
 	void SuspendSelect(){
 		select_flag = true;
+		audio_s.Play ();
 		selected_brick = try_brick;
 		try_brick = null;
 		if (selected_brick != null) {
@@ -79,6 +82,7 @@ public class FreeModeSelect : MonoBehaviour {
 			selected_brick.GetComponent<Collider> ().attachedRigidbody.isKinematic = false;
 			selected_brick.transform.parent = GameObject.Find ("Jenga").transform;
 			selected_brick = null;
+			audio_s.Play ();
 			yield return new WaitForSeconds (1f);
 			select_flag = false;
 			GetComponent<Renderer> ().enabled = true;
