@@ -8,6 +8,7 @@ public class ButtonController : MonoBehaviour {
 	private GameObject jenga;
 	private float timer = -1;
 	public Text message;
+	private int count = 0;
 	// Use this for initialization
 	void Start () {
 		newTurn = false;
@@ -19,6 +20,11 @@ public class ButtonController : MonoBehaviour {
 		if (newTurn == false) {
 			timer = 0;
 			message.enabled = true;
+			if (count % 2 == 0)
+				message.color = Color.green;
+			else
+				message.color = new Color(1.0f, 0.5f, 0.0f, 1.0f);
+			count++;
 			newTurn = true;
 			foreach (Transform brick in jenga.transform){
 				brick.gameObject.GetComponent<Brick> ().selected=false;

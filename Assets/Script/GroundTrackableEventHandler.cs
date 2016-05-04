@@ -143,13 +143,15 @@ namespace Vuforia
                 brick_col.enabled = true;
                 if (brick_col.attachedRigidbody)
                     brick_col.attachedRigidbody.useGravity = true;
-                if (!GameStart) 
-                    yield return new WaitForSeconds(0.1f);
+				if (!GameStart) {
+					yield return new WaitForSeconds (0.1f);
+				}
               
             }
+			if(!GameStart) 					
+				gameController.SendMessage ("NewTurn");
             GameStart = true;
 //			gameController=GameObject.Find ("GameController");
-			gameController.SendMessage ("NewTurn");
         }
 
         #endregion // PRIVATE_METHODS
