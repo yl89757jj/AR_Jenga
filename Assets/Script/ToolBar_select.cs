@@ -15,10 +15,12 @@ public class ToolBar_select : MonoBehaviour {
 	public float waitTime;
 	private GameObject ground;
 	private Vector3 offset = new Vector3(2.287587f, 0.377825f, 0.7604125f);
+	private AudioSource audio_s;
 
 
 	void Start() {
 		gameController = GameObject.Find ("GameController");
+		audio_s = GetComponent<AudioSource> ();
 		ground=GameObject.Find ("Ground");
 		try_brick = null;
 		select_flag = false;
@@ -87,6 +89,7 @@ public class ToolBar_select : MonoBehaviour {
 
 	//select after 5 seconds 
 	void SuspendSelect(){
+		audio_s.Play ();
 		select_flag = true;
 		selected_brick = try_brick;
 		try_brick = null;
@@ -118,6 +121,7 @@ public class ToolBar_select : MonoBehaviour {
 				selected_brick.GetComponent<Renderer> ().material = selected_brick.GetComponent<Brick> ().original_material;
 				selected_brick.GetComponent<Collider> ().attachedRigidbody.constraints = RigidbodyConstraints.None;
 				selected_brick.transform.parent = GameObject.Find ("Jenga").transform;
+			    audio_s.Play ();
 				yield return new WaitForSeconds (1f);
 				select_flag = false;
 				GetComponent<Renderer> ().enabled = true;

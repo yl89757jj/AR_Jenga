@@ -15,7 +15,7 @@ namespace Vuforia
     public class GroundTrackableEventHandler : MonoBehaviour,
                                                 ITrackableEventHandler
     {
-        private bool GameStart;
+        public bool GameStart;
 		public GameObject gameController;
         #region PRIVATE_MEMBER_VARIABLES
 
@@ -29,6 +29,22 @@ namespace Vuforia
 
         void Start()
         {
+			Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
+			Collider[] colliderComponents = GetComponentsInChildren<Collider>(true);
+
+			// Disable rendering:
+			foreach (Renderer component in rendererComponents)
+			{
+				component.enabled = false;
+			}
+
+			// Disable colliders:
+			foreach (Collider component in colliderComponents)
+			{
+				if (component.attachedRigidbody)
+					component.attachedRigidbody.useGravity = false;
+				component.enabled = false;
+			}
 
             GameStart = false;
             mTrackableBehaviour = GetComponent<TrackableBehaviour>();
@@ -110,25 +126,25 @@ namespace Vuforia
 
         private void OnTrackingLost()
         {
-            Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
-            Collider[] colliderComponents = GetComponentsInChildren<Collider>(true);
+			if (GameStart) {
+				Renderer[] rendererComponents = GetComponentsInChildren<Renderer> (true);
+				Collider[] colliderComponents = GetComponentsInChildren<Collider> (true);
 
-            // Disable rendering:
-            foreach (Renderer component in rendererComponents)
-            {
-                component.enabled = false;
-            }
+				// Disable rendering:
+				foreach (Renderer component in rendererComponents) {
+					component.enabled = false;
+				}
 
-            // Disable colliders:
-            foreach (Collider component in colliderComponents)
-            {
-                if (component.attachedRigidbody)
-                    component.attachedRigidbody.useGravity = false;
-                component.enabled = false;
-            }
+				// Disable colliders:
+				foreach (Collider component in colliderComponents) {
+					if (component.attachedRigidbody)
+						component.attachedRigidbody.useGravity = false;
+					component.enabled = false;
+				}
             
 
-            Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " lost");
+				Debug.Log ("Trackable " + mTrackableBehaviour.TrackableName + " lost");
+			}
         }
 
         IEnumerator Build(GameObject Jenga)
